@@ -10,7 +10,9 @@ import type {
   LoginInput,
   RegisterInput,
 } from '../../modules/user/user.interfaces';
-import errorHandling from '../../middlewares/errorHandling.middleware';
+import errorHandling, {
+  ErrorCode,
+} from '../../middlewares/errorHandling.middleware';
 
 @Injectable()
 export class UserResolver extends ResolverHelper implements ResolverInitiate {
@@ -31,7 +33,7 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             return await this.userService.register(payload);
           } catch (err) {
             this.LogImportantError(err);
-            throw errorHandling(err);
+            throw errorHandling(err.details, ErrorCode.BAD_REQUEST);
           }
         },
         login: async (_: never, { payload }: { payload: LoginInput }) => {
@@ -39,7 +41,7 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             return await this.userService.login(payload);
           } catch (err) {
             this.LogImportantError(err);
-            throw errorHandling(err);
+            throw errorHandling(err, ErrorCode.BAD_REQUEST);
           }
         },
       },

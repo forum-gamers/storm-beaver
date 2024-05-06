@@ -1,6 +1,6 @@
 import type { GraphQLRequestContext } from '@apollo/server';
 import type { GlobalContext } from '../interfaces';
-import errorHandling from './errorHandling.middleware';
+import errorHandling, { ErrorCode } from './errorHandling.middleware';
 import encryption from '../utils/encryption.utils';
 
 function getVariableName(
@@ -57,6 +57,6 @@ export default async function parseReq(
       context.request.variables[varName] = decrypted;
     }
   } catch (err) {
-    throw errorHandling(err);
+    throw errorHandling(err, ErrorCode.BAD_REQUEST);
   }
 }

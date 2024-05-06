@@ -30,6 +30,8 @@ import { config } from 'dotenv';
 
 config();
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 @Controller()
 export class GraphqlController implements OnModuleDestroy, OnModuleInit {
   private apolloServer: ApolloServer;
@@ -51,8 +53,8 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
     };
     this.apolloServer = new ApolloServer<BaseContext>({
       schema: this.createSchema(),
-      introspection: process.env.NODE_ENV !== 'production',
-      includeStacktraceInErrorResponses: process.env.NODE_ENV !== 'production',
+      introspection: !isProduction,
+      includeStacktraceInErrorResponses: !isProduction,
       status400ForVariableCoercionErrors: true,
       logger: this.logger,
       plugins: [
@@ -73,6 +75,14 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
           },
         },
       ],
+      formatError: (formatted, error) => {
+        return {
+          ...formatted,
+          message: formatted.message,
+          locations: undefined,
+          path: undefined,
+        };
+      },
     });
     this.logger.info(`apollo server running...`);
     await this.apolloServer.start();

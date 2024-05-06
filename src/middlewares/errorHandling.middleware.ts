@@ -1,5 +1,13 @@
-export default function errorHandling(
-  err: { message: string; statusCode: number; code?: string } | Error | any,
-) {
-  return new Error(err?.response?.data?.message || err.message || err).message;
+import { GraphQLError } from 'graphql';
+
+export enum ErrorCode {
+  BAD_REQUEST = 'BAD_REQUEST',
+}
+
+export default function errorHandling(message: string, code: ErrorCode) {
+  return new GraphQLError(message, {
+    extensions: {
+      code,
+    },
+  });
 }
