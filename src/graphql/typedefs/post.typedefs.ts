@@ -48,5 +48,8 @@ export const POST_TYPEDEFS = `#graphql
 
   type Query {
     getPublicContent(args: getPostParams): [PostResponse]
+    getMyPost(page: Int,limit: Int): [PostResponse]
+    getLikedPost(page: Int,limit: Int): [PostResponse]
+    getUserMedia(page: Int,limit: Int): [PostResponse]
   }
 `;
