@@ -23,28 +23,38 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { GlobalContext } from '../interfaces';
+import { USER_TYPEDEFS } from './typedefs/user.typedefs';
+import { UserResolver } from './resolvers/user.resolver';
+import parseReq from '../middlewares/parseReq.middleware';
+import { config } from 'dotenv';
+
+config();
 
 @Controller()
 export class GraphqlController implements OnModuleDestroy, OnModuleInit {
   private apolloServer: ApolloServer;
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+    private readonly userResolver: UserResolver,
   ) {}
 
   private createSchema() {
     return makeExecutableSchema({
-      typeDefs: [],
-      resolvers: [],
+      typeDefs: [USER_TYPEDEFS],
+      resolvers: [this.userResolver.GenerateResolver()],
     });
   }
 
-  public onModuleInit() {
+  public async onModuleInit() {
     const logInfo = (msg: string) => {
       this.logger.info(msg);
     };
     this.apolloServer = new ApolloServer<BaseContext>({
       schema: this.createSchema(),
       introspection: process.env.NODE_ENV !== 'production',
+      includeStacktraceInErrorResponses: process.env.NODE_ENV !== 'production',
+      status400ForVariableCoercionErrors: true,
+      logger: this.logger,
       plugins: [
         {
           async requestDidStart(
@@ -53,13 +63,19 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
             const { request } = context;
             if (request.operationName !== 'IntrospectionQuery')
               logInfo(`${request.http?.method}:${request.operationName}`);
-            return {};
+            return {
+              async didResolveOperation(
+                requestContext: GraphQLRequestContext<GlobalContext>,
+              ) {
+                await parseReq(requestContext);
+              },
+            };
           },
         },
       ],
     });
     this.logger.info(`apollo server running...`);
-    return this.apolloServer.start();
+    await this.apolloServer.start();
   }
 
   public onModuleDestroy() {
