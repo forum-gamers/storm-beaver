@@ -4,6 +4,8 @@ import * as winston from 'winston';
 import { GraphqlController } from './graphql/graphql.controller';
 import { UserModule } from './modules/user/user.module';
 import { ResolveModule } from './graphql/resolvers/resolver.module';
+import { ImageModule } from './modules/image/image.module';
+import { PostModule } from './modules/post/post.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { ResolveModule } from './graphql/resolvers/resolver.module';
     }),
     UserModule,
     ResolveModule,
+    ImageModule,
+    PostModule,
   ],
   controllers: [GraphqlController],
 })

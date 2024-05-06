@@ -27,6 +27,8 @@ import { USER_TYPEDEFS } from './typedefs/user.typedefs';
 import { UserResolver } from './resolvers/user.resolver';
 import parseReq from '../middlewares/parseReq.middleware';
 import { config } from 'dotenv';
+import { PostResolver } from './resolvers/post.resolver';
+import { POST_TYPEDEFS } from './typedefs/post.typedefs';
 
 config();
 
@@ -38,12 +40,16 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly userResolver: UserResolver,
+    private readonly postResolver: PostResolver,
   ) {}
 
   private createSchema() {
     return makeExecutableSchema({
-      typeDefs: [USER_TYPEDEFS],
-      resolvers: [this.userResolver.GenerateResolver()],
+      typeDefs: [USER_TYPEDEFS, POST_TYPEDEFS],
+      resolvers: [
+        this.userResolver.GenerateResolver(),
+        this.postResolver.GenerateResolver(),
+      ],
     });
   }
 

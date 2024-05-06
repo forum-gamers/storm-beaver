@@ -4,7 +4,6 @@ import {
   loadPackageDefinition,
   credentials,
   type ServiceClientConstructor,
-  Metadata,
   type GrpcObject,
 } from '@grpc/grpc-js';
 import { loadSync } from '@grpc/proto-loader';
@@ -17,11 +16,12 @@ import type {
   UserParams,
 } from './user.interfaces';
 import { config } from 'dotenv';
+import { GRPCBASE } from '../../base/grpc.base.service';
 
 config();
 
 @Injectable()
-export class UserService implements OnModuleInit {
+export class UserService extends GRPCBASE implements OnModuleInit {
   private userService: IUserService;
 
   public onModuleInit() {
@@ -48,45 +48,48 @@ export class UserService implements OnModuleInit {
   }
 
   public async getMultipleUsers(params: MultipleUserParams, token: string) {
-    const metadata = new Metadata();
-    metadata.add('access_token', token);
-
     return new Promise<IUser[]>((resolve) => {
-      this.userService.GetMultipleUser(params, metadata, (err, response) => {
-        resolve(err ? [] : response.data);
-      });
+      this.userService.GetMultipleUser(
+        params,
+        this.generateMetadata({ access_token: token }),
+        (err, response) => {
+          resolve(err ? [] : response.data);
+        },
+      );
     });
   }
 
   public async me(token: string) {
-    const metadata = new Metadata();
-    metadata.add('access_token', token);
-
     return new Promise<IUser>((resolve, reject) => {
-      this.userService.Me({}, metadata, (err, response) => {
-        if (err) reject(err);
+      this.userService.Me(
+        {},
+        this.generateMetadata({ access_token: token }),
+        (err, response) => {
+          if (err) reject(err);
 
-        resolve(response?.data);
-      });
+          resolve(response?.data);
+        },
+      );
     });
   }
 
   public async getById(params: UserParams, token: string) {
-    const metadata = new Metadata();
-    metadata.add('access_token', token);
-
     return new Promise<IUser>((resolve, reject) => {
-      this.userService.GetUserById(params, metadata, (err, response) => {
-        if (err) reject(err);
+      this.userService.GetUserById(
+        params,
+        this.generateMetadata({ access_token: token }),
+        (err, response) => {
+          if (err) reject(err);
 
-        resolve(response?.data);
-      });
+          resolve(response?.data);
+        },
+      );
     });
   }
 
   public async register(args: RegisterInput) {
     return new Promise<IUser>((resolve, reject) => {
-      this.userService.Register(args, new Metadata(), (err, resp) => {
+      this.userService.Register(args, this.generateMetadata(), (err, resp) => {
         if (err) reject(err);
 
         resolve(resp?.data);
@@ -96,7 +99,7 @@ export class UserService implements OnModuleInit {
 
   public async login(args: LoginInput) {
     return new Promise<string>((resolve, reject) => {
-      this.userService.Login(args, new Metadata(), (err, resp) => {
+      this.userService.Login(args, this.generateMetadata(), (err, resp) => {
         if (err) reject(err);
 
         resolve(resp?.token);
