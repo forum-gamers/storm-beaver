@@ -9,6 +9,7 @@ import type {
 import type {
   LoginInput,
   RegisterInput,
+  UserParams,
 } from '../../modules/user/user.interfaces';
 import errorHandling, {
   ErrorCode,
@@ -23,9 +24,10 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
   GenerateResolver(): ResolverObj {
     return {
       Query: {
-        me: () => {
-          return {};
-        },
+        me: async (_: never, args: {}, ctx: GlobalContext) =>
+          await this.userService.me(ctx?.access_token),
+        getById: async (_: never, args: UserParams, ctx: GlobalContext) =>
+          await this.userService.getById(args, ctx?.access_token),
       },
       Mutation: {
         register: async (_: never, { payload }: { payload: RegisterInput }) => {
@@ -41,6 +43,7 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             return await this.userService.login(payload);
           } catch (err) {
             this.LogImportantError(err);
+            console.log(err);
             throw errorHandling(err, ErrorCode.BAD_REQUEST);
           }
         },

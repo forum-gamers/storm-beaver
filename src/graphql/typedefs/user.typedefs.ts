@@ -36,6 +36,7 @@ export const USER_TYPEDEFS = `#graphql
 
   type Query {
     me: IUser!
+    getById(id: String!): IUser!
   }
 
   type Mutation {

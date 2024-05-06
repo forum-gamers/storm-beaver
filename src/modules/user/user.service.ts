@@ -62,9 +62,11 @@ export class UserService implements OnModuleInit {
     const metadata = new Metadata();
     metadata.add('access_token', token);
 
-    return new Promise<IUser>((resolve) => {
+    return new Promise<IUser>((resolve, reject) => {
       this.userService.Me({}, metadata, (err, response) => {
-        resolve(err ? null : response.data);
+        if (err) reject(err);
+
+        resolve(response?.data);
       });
     });
   }
@@ -73,9 +75,11 @@ export class UserService implements OnModuleInit {
     const metadata = new Metadata();
     metadata.add('access_token', token);
 
-    return new Promise<IUser>((resolve) => {
+    return new Promise<IUser>((resolve, reject) => {
       this.userService.GetUserById(params, metadata, (err, response) => {
-        resolve(err ? null : response.data);
+        if (err) reject(err);
+
+        resolve(response?.data);
       });
     });
   }

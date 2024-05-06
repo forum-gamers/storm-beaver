@@ -99,14 +99,12 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
       res,
       apolloServer: this.apolloServer,
       context: async () => {
-        const rawReq = Raw(req);
+        const {
+          headers: { access_token, v },
+        } = Raw(req);
         return {
-          req: {
-            ...rawReq,
-            access_token: rawReq.headers.access_token,
-            v: rawReq.headers.v === 'true',
-          },
-          res: Raw(res),
+          access_token,
+          verify: v === 'true',
         };
       },
     });
