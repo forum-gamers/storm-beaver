@@ -6,7 +6,10 @@ import type {
   ResolverInitiate,
   ResolverObj,
 } from '../../interfaces';
-import type { LoginInput, RegisterInput } from '../../modules/user/interfaces';
+import type {
+  LoginInput,
+  RegisterInput,
+} from '../../modules/user/user.interfaces';
 import errorHandling from '../../middlewares/errorHandling.middleware';
 
 @Injectable()
@@ -28,7 +31,7 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             return await this.userService.register(payload);
           } catch (err) {
             this.LogImportantError(err);
-            throw new Error(err.message);
+            throw errorHandling(err);
           }
         },
         login: async (_: never, { payload }: { payload: LoginInput }) => {

@@ -15,7 +15,7 @@ import type {
   MultipleUserParams,
   RegisterInput,
   UserParams,
-} from './interfaces';
+} from './user.interfaces';
 import { config } from 'dotenv';
 
 config();

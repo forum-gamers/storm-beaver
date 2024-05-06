@@ -31,6 +31,7 @@ export const USER_TYPEDEFS = `#graphql
   input LoginInput {
     email: String!
     password: String!
+    as: String
   }
 
   type Query {
