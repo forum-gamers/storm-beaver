@@ -53,10 +53,20 @@ export interface RegisterInput {
   confirmPassword: string;
 }
 
+export interface Message {
+  message: string;
+}
+
+export interface ChangeProfileInput {
+  url: string;
+  fileId: string;
+}
+
 export interface IUserService extends ServiceClient {
   GetMultipleUser: GRPC_UNARY<MultipleUserParams, UserDatas>;
   Me: GRPC_UNARY<NoArguments, UserData>;
   GetUserById: GRPC_UNARY<UserParams, UserData>;
   Register: GRPC_UNARY<RegisterInput, UserData>;
   Login: GRPC_UNARY<LoginInput, TokenResponse>;
+  ChangeProfileImg: GRPC_UNARY<ChangeProfileInput, Message>;
 }

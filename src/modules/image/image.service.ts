@@ -1,7 +1,7 @@
 import { Injectable, type OnModuleInit } from '@nestjs/common';
-import { GRPCBASE } from 'src/base/grpc.base.service';
+import { GRPCBASE } from '../../base/grpc.base.service';
 import type {
-  FileHeader,
+  DeleteFileInput,
   IImageService,
   UploadFileResult,
 } from './image.interface';
@@ -13,6 +13,7 @@ import {
   type GrpcObject,
 } from '@grpc/grpc-js';
 import { loadSync } from '@grpc/proto-loader';
+import type { FileUploadInput } from '../../interfaces/request';
 
 @Injectable()
 export class ImageService extends GRPCBASE implements OnModuleInit {
@@ -40,7 +41,7 @@ export class ImageService extends GRPCBASE implements OnModuleInit {
     ) as IImageService;
   }
 
-  public async uploadImg(args: FileHeader, access_token: string) {
+  public async uploadImg(args: FileUploadInput, access_token: string) {
     return new Promise<UploadFileResult>((resolve, reject) => {
       this.imageService.UploadImg(
         args,
@@ -49,6 +50,20 @@ export class ImageService extends GRPCBASE implements OnModuleInit {
           if (err) reject(err);
 
           resolve(resp);
+        },
+      );
+    });
+  }
+
+  public async deleteFile(args: DeleteFileInput, access_token: string) {
+    return new Promise<string>((resolve, reject) => {
+      this.imageService.DeleteFile(
+        args,
+        this.generateMetadata({ access_token }),
+        (err, resp) => {
+          if (err) reject(err);
+          console.log({ resp });
+          resolve(resp?.message ?? '');
         },
       );
     });

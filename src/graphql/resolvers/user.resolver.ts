@@ -14,10 +14,15 @@ import type {
 import errorHandling, {
   ErrorCode,
 } from '../../middlewares/errorHandling.middleware';
+import type { FileInput } from '../../interfaces/request';
+import { ImageService } from '../../modules/image/image.service';
 
 @Injectable()
 export class UserResolver extends ResolverHelper implements ResolverInitiate {
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly imageService: ImageService,
+  ) {
     super();
   }
 
@@ -43,8 +48,39 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             return await this.userService.login(payload);
           } catch (err) {
             this.LogImportantError(err);
-            console.log(err);
             throw errorHandling(err, ErrorCode.BAD_REQUEST);
+          }
+        },
+        changeProfile: async (
+          _: never,
+          { payload: { filename, folder, base64 } }: { payload: FileInput },
+          { access_token }: GlobalContext,
+        ) => {
+          try {
+            const { file_id, url } = await this.imageService.uploadImg(
+              {
+                filename,
+                folder,
+                content: base64,
+              },
+              access_token,
+            );
+
+            const result = await this.userService.changeProfile(
+              { fileId: file_id, url },
+              access_token,
+            );
+
+            if (result !== 'success')
+              await this.imageService.deleteFile(
+                { file_id: result },
+                access_token,
+              );
+
+            return url;
+          } catch (err) {
+            this.LogImportantError(err);
+            throw errorHandling(err, ErrorCode.INTERNAL_SERVER);
           }
         },
       },

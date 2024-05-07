@@ -8,6 +8,7 @@ import {
 } from '@grpc/grpc-js';
 import { loadSync } from '@grpc/proto-loader';
 import type {
+  ChangeProfileInput,
   IUser,
   IUserService,
   LoginInput,
@@ -104,6 +105,20 @@ export class UserService extends GRPCBASE implements OnModuleInit {
 
         resolve(resp?.token);
       });
+    });
+  }
+
+  public async changeProfile(args: ChangeProfileInput, access_token: string) {
+    return new Promise<string>((resolve, reject) => {
+      this.userService.ChangeProfileImg(
+        args,
+        this.generateMetadata({ access_token }),
+        (err, resp) => {
+          if (err) reject(err);
+
+          resolve(resp.message);
+        },
+      );
     });
   }
 }

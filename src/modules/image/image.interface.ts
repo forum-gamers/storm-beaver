@@ -1,11 +1,10 @@
 import type { ServiceClient } from '@grpc/grpc-js/build/src/make-client';
-import { GRPC_UNARY } from 'src/interfaces';
+import type { GRPC_UNARY } from '../../interfaces';
+import type { FileUploadInput } from '../../interfaces/request';
 
 export interface FileHeader {
   filename: string;
   contentType: string;
-  size: number;
-  header: string[];
   content: Buffer;
 }
 
@@ -16,6 +15,15 @@ export interface UploadFileResult {
   content_type: string;
 }
 
+export interface DeleteFileInput {
+  file_id: string;
+}
+
+export interface Message {
+  message: string;
+}
+
 export interface IImageService extends ServiceClient {
-  UploadImg: GRPC_UNARY<FileHeader, UploadFileResult>;
+  UploadImg: GRPC_UNARY<FileUploadInput, UploadFileResult>;
+  DeleteFile: GRPC_UNARY<DeleteFileInput, Message>;
 }

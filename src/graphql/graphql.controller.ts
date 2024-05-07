@@ -81,21 +81,20 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
           },
         },
       ],
-      formatError: (formatted, error) => {
-        return {
-          ...formatted,
-          message: formatted.message,
-          locations: undefined,
-          path: undefined,
-        };
-      },
+      formatError: (formatted) => ({
+        ...formatted,
+        message: formatted.message,
+        locations: undefined,
+        path: undefined,
+      }),
     });
     this.logger.info(`apollo server running...`);
     await this.apolloServer.start();
   }
 
-  public onModuleDestroy() {
-    this.apolloServer.stop();
+  public async onModuleDestroy() {
+    await this.apolloServer.stop();
+    this.logger.info('apollo server shutdown...');
   }
 
   @All()

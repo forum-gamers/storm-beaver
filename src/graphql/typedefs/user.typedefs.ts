@@ -34,6 +34,12 @@ export const USER_TYPEDEFS = `#graphql
     as: String
   }
 
+  input FileInput {
+    base64: String!
+    folder: String!
+    filename: String!
+  }
+
   type Query {
     me: IUser!
     getById(id: String!): IUser!
@@ -42,5 +48,6 @@ export const USER_TYPEDEFS = `#graphql
   type Mutation {
     register(payload: RegisterInput!): IUser!
     login(payload: LoginInput!): String!
+    changeProfile(payload: FileInput!): String!
   }
 `;
