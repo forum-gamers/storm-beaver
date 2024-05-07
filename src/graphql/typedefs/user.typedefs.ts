@@ -36,7 +36,6 @@ export const USER_TYPEDEFS = `#graphql
 
   input FileInput {
     base64: String!
-    folder: String!
     filename: String!
   }
 

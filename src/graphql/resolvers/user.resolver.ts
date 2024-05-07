@@ -53,14 +53,14 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
         },
         changeProfile: async (
           _: never,
-          { payload: { filename, folder, base64 } }: { payload: FileInput },
+          { payload: { filename, base64 } }: { payload: FileInput },
           { access_token }: GlobalContext,
         ) => {
           try {
             const { file_id, url } = await this.imageService.uploadImg(
               {
                 filename,
-                folder,
+                folder: 'user-profile',
                 content: base64,
               },
               access_token,

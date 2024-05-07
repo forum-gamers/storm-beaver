@@ -1,6 +1,5 @@
 export interface FileInput {
   base64: string;
-  folder: string;
   filename: string;
 }
 
