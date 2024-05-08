@@ -1,7 +1,8 @@
 import type { GraphQLRequestContext } from '@apollo/server';
 import type { GlobalContext } from '../interfaces';
-import errorHandling, { ErrorCode } from './errorHandling.middleware';
+import errorHandling from './errorHandling.middleware';
 import encryption from '../utils/encryption.utils';
+import AppError, { ErrorCode } from '../base/error.base';
 
 function getVariableName(
   context: GraphQLRequestContext<GlobalContext>,
@@ -57,6 +58,11 @@ export default async function parseReq(
       context.request.variables[varName] = decrypted;
     }
   } catch (err) {
-    throw errorHandling(err, ErrorCode.BAD_REQUEST);
+    throw errorHandling(
+      new AppError({
+        message: err?.message ?? 'internal server error',
+        status: ErrorCode.BAD_REQUEST,
+      }),
+    );
   }
 }

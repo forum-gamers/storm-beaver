@@ -62,7 +62,6 @@ export class ImageService extends GRPCBASE implements OnModuleInit {
         this.generateMetadata({ access_token }),
         (err, resp) => {
           if (err) reject(err);
-          console.log({ resp });
           resolve(resp?.message ?? '');
         },
       );

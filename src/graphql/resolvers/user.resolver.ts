@@ -11,11 +11,10 @@ import type {
   RegisterInput,
   UserParams,
 } from '../../modules/user/user.interfaces';
-import errorHandling, {
-  ErrorCode,
-} from '../../middlewares/errorHandling.middleware';
+import errorHandling from '../../middlewares/errorHandling.middleware';
 import type { FileInput } from '../../interfaces/request';
 import { ImageService } from '../../modules/image/image.service';
+import AppError, { ErrorCode } from 'src/base/error.base';
 
 @Injectable()
 export class UserResolver extends ResolverHelper implements ResolverInitiate {
@@ -40,7 +39,12 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             return await this.userService.register(payload);
           } catch (err) {
             this.LogImportantError(err);
-            throw errorHandling(err.details, ErrorCode.BAD_REQUEST);
+            throw errorHandling(
+              new AppError({
+                message: err.details,
+                status: ErrorCode.BAD_REQUEST,
+              }),
+            );
           }
         },
         login: async (_: never, { payload }: { payload: LoginInput }) => {
@@ -48,7 +52,12 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             return await this.userService.login(payload);
           } catch (err) {
             this.LogImportantError(err);
-            throw errorHandling(err, ErrorCode.BAD_REQUEST);
+            throw errorHandling(
+              new AppError({
+                message: err.details,
+                status: ErrorCode.BAD_REQUEST,
+              }),
+            );
           }
         },
         changeProfile: async (
@@ -80,7 +89,53 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             return url;
           } catch (err) {
             this.LogImportantError(err);
-            throw errorHandling(err, ErrorCode.INTERNAL_SERVER);
+            throw errorHandling(
+              err instanceof AppError
+                ? err
+                : new AppError({
+                    message: 'Internal Server Error',
+                    status: ErrorCode.INTERNAL_SERVER,
+                  }),
+            );
+          }
+        },
+        changeBackground: async (
+          _: never,
+          { payload: { filename, base64 } }: { payload: FileInput },
+          { access_token }: GlobalContext,
+        ) => {
+          try {
+            const { file_id, url } = await this.imageService.uploadImg(
+              {
+                filename,
+                folder: 'user-background',
+                content: base64,
+              },
+              access_token,
+            );
+
+            const result = await this.userService.changeBackground(
+              { fileId: file_id, url },
+              access_token,
+            );
+
+            if (result !== 'success')
+              await this.imageService.deleteFile(
+                { file_id: result },
+                access_token,
+              );
+
+            return url;
+          } catch (err) {
+            this.LogImportantError(err);
+            throw errorHandling(
+              err instanceof AppError
+                ? err
+                : new AppError({
+                    message: 'Internal Server Error',
+                    status: ErrorCode.INTERNAL_SERVER,
+                  }),
+            );
           }
         },
       },

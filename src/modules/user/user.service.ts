@@ -121,4 +121,21 @@ export class UserService extends GRPCBASE implements OnModuleInit {
       );
     });
   }
+
+  public async changeBackground(
+    args: ChangeProfileInput,
+    access_token: string,
+  ) {
+    return new Promise<string>((resolve, reject) => {
+      this.userService.ChangeBackgroundImg(
+        args,
+        this.generateMetadata({ access_token }),
+        (err, resp) => {
+          if (err) reject(err);
+
+          resolve(resp.message);
+        },
+      );
+    });
+  }
 }

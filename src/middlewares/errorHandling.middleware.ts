@@ -1,14 +1,10 @@
 import { GraphQLError } from 'graphql';
+import AppError from '../base/error.base';
 
-export enum ErrorCode {
-  BAD_REQUEST = 'BAD_REQUEST',
-  INTERNAL_SERVER = 'INTERNAL_SERVER',
-}
-
-export default function errorHandling(message: string, code: ErrorCode) {
-  return new GraphQLError(message, {
+export default function errorHandling(err: AppError) {
+  return new GraphQLError(err.message, {
     extensions: {
-      code,
+      code: err.name,
     },
   });
 }

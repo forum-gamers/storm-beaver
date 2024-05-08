@@ -48,5 +48,6 @@ export const USER_TYPEDEFS = `#graphql
     register(payload: RegisterInput!): IUser!
     login(payload: LoginInput!): String!
     changeProfile(payload: FileInput!): String!
+    changeBackground(payload: FileInput!): String!
   }
 `;

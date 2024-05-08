@@ -69,4 +69,5 @@ export interface IUserService extends ServiceClient {
   Register: GRPC_UNARY<RegisterInput, UserData>;
   Login: GRPC_UNARY<LoginInput, TokenResponse>;
   ChangeProfileImg: GRPC_UNARY<ChangeProfileInput, Message>;
+  ChangeBackgroundImg: GRPC_UNARY<ChangeProfileInput, Message>;
 }
