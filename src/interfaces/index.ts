@@ -1,5 +1,6 @@
 import type { BaseContext } from '@apollo/server';
 import type { Metadata } from '@grpc/grpc-js';
+import GrpcError from '../base/grpcError.base';
 
 export interface GlobalContext extends BaseContext {
   access_token: string | undefined;
@@ -12,7 +13,7 @@ export interface ServiceDefinition {
   url: string;
 }
 
-export type CallBack<T = any> = (err: Error | null, response: T) => void;
+export type CallBack<T = any> = (err: GrpcError | null, response: T) => void;
 
 export type GRPC_UNARY<T, R> = (
   args: T,

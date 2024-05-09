@@ -1,5 +1,6 @@
 import type { ServiceClient } from '@grpc/grpc-js/build/src/make-client';
 import type { FileHeader, GRPC_UNARY } from '../../interfaces';
+import type { FileInput } from '../../interfaces/request';
 
 export interface Message {
   message: string;
@@ -81,6 +82,13 @@ export interface TopTag {
 
 export interface TopTagResp {
   datas: TopTag[];
+}
+
+export interface CreatePostInput {
+  files: FileInput[];
+  text: string;
+  allowComment: boolean;
+  privacy: string;
 }
 
 export interface IPostService extends ServiceClient {

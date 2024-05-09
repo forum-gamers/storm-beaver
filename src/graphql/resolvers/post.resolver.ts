@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ResolverHelper } from '../graphql.helper';
 import type {
+  FileHeader,
   GlobalContext,
   ResolverInitiate,
   ResolverObj,
@@ -9,10 +10,14 @@ import { UserService } from '../../modules/user/user.service';
 import { PostService } from '../../modules/post/services/post.service';
 import { ImageService } from '../../modules/image/image.service';
 import type {
+  CreatePostInput,
   GetPostParams,
   Pagination,
 } from '../../modules/post/post.interfaces';
 import type { PostResolverResp } from '../../interfaces/post.response';
+import errorHandling from '../../middlewares/errorHandling.middleware';
+import AppError from '../../base/error.base';
+import { Status } from '@grpc/grpc-js/build/src/constants';
 
 @Injectable()
 export class PostResolver extends ResolverHelper implements ResolverInitiate {
@@ -130,6 +135,75 @@ export class PostResolver extends ResolverHelper implements ResolverInitiate {
           } catch (err) {
             this.LogImportantError(err);
             return [];
+          }
+        },
+      },
+      Mutation: {
+        createPost: async (
+          _: never,
+          {
+            args: { files: fileInput, text, allowComment, privacy } = {
+              files: [],
+              text: '',
+              allowComment: false,
+              privacy: '',
+            },
+          }: { args: CreatePostInput },
+          { access_token }: GlobalContext,
+        ) => {
+          try {
+            const files: FileHeader[] = [];
+            if (!!fileInput.length) {
+              if (fileInput.length > 4)
+                throw new AppError({
+                  message: 'max upload file is 4',
+                  status: Status.INVALID_ARGUMENT,
+                });
+
+              const { datas } = await this.imageService.bulkUpload(
+                {
+                  folder: 'post',
+                  files: fileInput.map((el) => ({
+                    content: el.base64,
+                    filename: el.filename,
+                  })),
+                },
+                access_token,
+              );
+              files.push(
+                ...datas.map((data) => ({
+                  url: data.url,
+                  contentType: data.content_type,
+                  fileId: data.file_id,
+                })),
+              );
+            }
+
+            const [post, user] = await Promise.all([
+              this.postService.createPost(
+                {
+                  files,
+                  text,
+                  allowComment,
+                  privacy,
+                },
+                access_token,
+              ),
+              this.userService.me(access_token),
+            ]);
+
+            return {
+              ...post,
+              user,
+              countLike: 0,
+              countShare: 0,
+              isLiked: false,
+              isShared: false,
+              totalData: 1,
+            };
+          } catch (err) {
+            this.LogImportantError(err);
+            throw errorHandling(err);
           }
         },
       },

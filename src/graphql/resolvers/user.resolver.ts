@@ -14,7 +14,6 @@ import type {
 import errorHandling from '../../middlewares/errorHandling.middleware';
 import type { FileInput } from '../../interfaces/request';
 import { ImageService } from '../../modules/image/image.service';
-import AppError, { ErrorCode } from 'src/base/error.base';
 
 @Injectable()
 export class UserResolver extends ResolverHelper implements ResolverInitiate {
@@ -39,12 +38,7 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             return await this.userService.register(payload);
           } catch (err) {
             this.LogImportantError(err);
-            throw errorHandling(
-              new AppError({
-                message: err.details,
-                status: ErrorCode.BAD_REQUEST,
-              }),
-            );
+            throw errorHandling(err);
           }
         },
         login: async (_: never, { payload }: { payload: LoginInput }) => {
@@ -52,12 +46,7 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             return await this.userService.login(payload);
           } catch (err) {
             this.LogImportantError(err);
-            throw errorHandling(
-              new AppError({
-                message: err.details,
-                status: ErrorCode.BAD_REQUEST,
-              }),
-            );
+            throw errorHandling(err);
           }
         },
         changeProfile: async (
@@ -89,14 +78,7 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             return url;
           } catch (err) {
             this.LogImportantError(err);
-            throw errorHandling(
-              err instanceof AppError
-                ? err
-                : new AppError({
-                    message: 'Internal Server Error',
-                    status: ErrorCode.INTERNAL_SERVER,
-                  }),
-            );
+            throw errorHandling(err);
           }
         },
         changeBackground: async (
@@ -128,14 +110,7 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             return url;
           } catch (err) {
             this.LogImportantError(err);
-            throw errorHandling(
-              err instanceof AppError
-                ? err
-                : new AppError({
-                    message: 'Internal Server Error',
-                    status: ErrorCode.INTERNAL_SERVER,
-                  }),
-            );
+            throw errorHandling(err);
           }
         },
       },

@@ -46,10 +46,26 @@ export const POST_TYPEDEFS = `#graphql
     limit: Int
   }
 
+  input FileInput {
+    base64: String!
+    filename: String!
+  }
+
+  input CreatePostInput {
+    files: [FileInput]
+    text: String
+    allowComment: Boolean
+    privacy: String
+  }
+
   type Query {
     getPublicContent(args: getPostParams): [PostResponse]
     getMyPost(page: Int,limit: Int): [PostResponse]
     getLikedPost(page: Int,limit: Int): [PostResponse]
     getUserMedia(page: Int,limit: Int): [PostResponse]
+  }
+
+  type Mutation {
+    createPost(args: CreatePostInput!): PostResponse
   }
 `;

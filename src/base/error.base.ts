@@ -1,17 +1,14 @@
+import { Status } from '@grpc/grpc-js/build/src/constants';
+
 export interface AppErrorProps {
   message: string;
-  status: ErrorCode;
+  status: Status;
 }
 
 export default class AppError extends Error {
   constructor({ message, status }: AppErrorProps) {
     super(message);
     Object.setPrototypeOf(this, AppError.prototype);
-    this.name = status;
+    this.name = Status[status];
   }
-}
-
-export enum ErrorCode {
-  BAD_REQUEST = 'BAD_REQUEST',
-  INTERNAL_SERVER = 'INTERNAL_SERVER',
 }
