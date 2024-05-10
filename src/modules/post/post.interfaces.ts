@@ -91,9 +91,13 @@ export interface CreatePostInput {
   privacy: string;
 }
 
+export interface ListIdsResp {
+  datas: string[];
+}
+
 export interface IPostService extends ServiceClient {
   CreatePost: GRPC_UNARY<PostForm, Post>;
-  DeletePost: GRPC_UNARY<PostIdPayload, Message>;
+  DeletePost: GRPC_UNARY<PostIdPayload, ListIdsResp>;
   GetPublicContent: GRPC_UNARY<GetPostParams, PostRespWithMetadata>;
   GetUserPost: GRPC_UNARY<Pagination, PostRespWithMetadata>;
   GetLikedPost: GRPC_UNARY<Pagination, PostRespWithMetadata>;

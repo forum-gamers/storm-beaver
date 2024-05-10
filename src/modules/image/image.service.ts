@@ -3,7 +3,9 @@ import { GRPCBASE } from '../../base/grpc.base.service';
 import type {
   DeleteFileInput,
   IImageService,
+  Message,
   MultipleFileHeader,
+  MultipleFileIdInput,
   MultipleUploadFileResult,
   UploadFileResult,
 } from './image.interface';
@@ -73,6 +75,20 @@ export class ImageService extends GRPCBASE implements OnModuleInit {
   public async bulkUpload(args: MultipleFileHeader, access_token: string) {
     return new Promise<MultipleUploadFileResult>((resolve, reject) => {
       this.imageService.BulkUpload(
+        args,
+        this.generateMetadata({ access_token }),
+        (err, resp) => {
+          if (err) reject(this.convertError(err));
+
+          resolve(resp);
+        },
+      );
+    });
+  }
+
+  public async bulkDelete(args: MultipleFileIdInput, access_token: string) {
+    return new Promise<Message>((resolve, reject) => {
+      this.imageService.BulkDeleteFile(
         args,
         this.generateMetadata({ access_token }),
         (err, resp) => {

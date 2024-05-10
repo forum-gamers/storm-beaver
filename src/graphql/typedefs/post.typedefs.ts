@@ -67,5 +67,6 @@ export const POST_TYPEDEFS = `#graphql
 
   type Mutation {
     createPost(args: CreatePostInput!): PostResponse
+    deletePost(postId: String!): String
   }
 `;

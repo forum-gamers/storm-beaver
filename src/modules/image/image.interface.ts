@@ -35,8 +35,13 @@ export interface MultipleUploadFileResult {
   datas: UploadFileResult[];
 }
 
+export interface MultipleFileIdInput {
+  file_ids: string[];
+}
+
 export interface IImageService extends ServiceClient {
   UploadImg: GRPC_UNARY<FileUploadInput, UploadFileResult>;
   DeleteFile: GRPC_UNARY<DeleteFileInput, Message>;
   BulkUpload: GRPC_UNARY<MultipleFileHeader, MultipleUploadFileResult>;
+  BulkDeleteFile: GRPC_UNARY<MultipleFileIdInput, Message>;
 }

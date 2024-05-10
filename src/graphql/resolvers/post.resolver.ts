@@ -206,6 +206,21 @@ export class PostResolver extends ResolverHelper implements ResolverInitiate {
             throw errorHandling(err);
           }
         },
+        deletePost: async (
+          _: never,
+          { postId }: { postId: string },
+          { access_token }: GlobalContext,
+        ) => {
+          const { datas } = await this.postService.deletePost(
+            { _id: postId },
+            access_token,
+          );
+
+          if (!!datas.length)
+            this.imageService.bulkDelete({ file_ids: datas }, access_token);
+
+          return 'success';
+        },
       },
     };
   }

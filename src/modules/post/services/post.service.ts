@@ -10,7 +10,7 @@ import { join } from 'path';
 import type {
   GetPostParams,
   IPostService,
-  Message,
+  ListIdsResp,
   Pagination,
   PaginationWithUserId,
   Post,
@@ -62,12 +62,12 @@ export class PostService extends GRPCBASE implements OnModuleInit {
   }
 
   public async deletePost(args: PostIdPayload, token: string) {
-    return new Promise<Message>((resolve, reject) => {
+    return new Promise<ListIdsResp>((resolve, reject) => {
       this.postService.DeletePost(
         args,
         this.generateMetadata({ access_token: token }),
         (err, resp) => {
-          if (err) reject(err);
+          if (err) reject(this.convertError(err));
 
           resolve(resp);
         },
