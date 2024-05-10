@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { ResolverHelper } from '../graphql.helper';
+import { ResolverHelper } from '../../graphql.helper';
 import type {
   FileHeader,
   GlobalContext,
   ResolverInitiate,
   ResolverObj,
-} from '../../interfaces';
-import { UserService } from '../../modules/user/user.service';
-import { PostService } from '../../modules/post/services/post.service';
-import { ImageService } from '../../modules/image/image.service';
+} from '../../../interfaces';
+import { UserService } from '../../../modules/user/user.service';
+import { PostService } from '../../../modules/post/services/post.service';
+import { ImageService } from '../../../modules/image/image.service';
 import type {
   CreatePostInput,
   GetPostParams,
   Pagination,
   PaginationWithUserId,
-} from '../../modules/post/post.interfaces';
-import type { PostResolverResp } from '../../interfaces/post.response';
-import errorHandling from '../../middlewares/errorHandling.middleware';
-import AppError from '../../base/error.base';
+} from '../../../modules/post/interfaces/post.interfaces';
+import type { PostResolverResp } from '../../../interfaces/post.response';
+import errorHandling from '../../../middlewares/errorHandling.middleware';
+import AppError from '../../../base/error.base';
 import { Status } from '@grpc/grpc-js/build/src/constants';
 
 @Injectable()

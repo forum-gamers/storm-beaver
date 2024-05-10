@@ -1,12 +1,5 @@
 import { Injectable, type OnModuleInit } from '@nestjs/common';
-import {
-  loadPackageDefinition,
-  credentials,
-  type ServiceClientConstructor,
-  type GrpcObject,
-} from '@grpc/grpc-js';
-import { loadSync } from '@grpc/proto-loader';
-import { join } from 'path';
+import { credentials } from '@grpc/grpc-js';
 import type {
   GetPostParams,
   IPostService,
@@ -18,8 +11,9 @@ import type {
   PostIdPayload,
   PostRespWithMetadata,
   TopTagResp,
-} from '../post.interfaces';
+} from '../interfaces/post.interfaces';
 import { GRPCBASE } from '../../../base/grpc.base.service';
+import { join } from 'path';
 
 @Injectable()
 export class PostService extends GRPCBASE implements OnModuleInit {
@@ -29,17 +23,11 @@ export class PostService extends GRPCBASE implements OnModuleInit {
   }
 
   private loadPostDefinition() {
-    const Service = (
-      loadPackageDefinition(
-        loadSync(join(__dirname, '../proto/post.proto'), {
-          keepCase: true,
-          longs: String,
-          enums: String,
-          defaults: true,
-          oneofs: true,
-        }),
-      ).post as GrpcObject
-    ).PostService as ServiceClientConstructor;
+    const Service = this.loadService(
+      join(__dirname, '../proto/post.proto'),
+      'post',
+      'PostService',
+    );
 
     this.postService = new Service(
       process.env.GRPC_POST_SERVICE ?? 'localhost:50052',

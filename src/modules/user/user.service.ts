@@ -1,12 +1,6 @@
 import { Injectable, type OnModuleInit } from '@nestjs/common';
 import { join } from 'path';
-import {
-  loadPackageDefinition,
-  credentials,
-  type ServiceClientConstructor,
-  type GrpcObject,
-} from '@grpc/grpc-js';
-import { loadSync } from '@grpc/proto-loader';
+import { credentials } from '@grpc/grpc-js';
 import type {
   ChangeProfileInput,
   IUser,
@@ -30,17 +24,11 @@ export class UserService extends GRPCBASE implements OnModuleInit {
   }
 
   private loadUserDefinition() {
-    const Service = (
-      loadPackageDefinition(
-        loadSync(join(__dirname, './proto/user.proto'), {
-          keepCase: true,
-          longs: String,
-          enums: String,
-          defaults: true,
-          oneofs: true,
-        }),
-      ).user as GrpcObject
-    ).UserService as ServiceClientConstructor;
+    const Service = this.loadService(
+      join(__dirname, './proto/user.proto'),
+      'user',
+      'UserService',
+    );
 
     this.userService = new Service(
       process.env.GRPC_USER_SERVICE ?? 'localhost:50050',

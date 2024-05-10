@@ -1,4 +1,4 @@
 import type { IUser } from '../modules/user/user.interfaces';
-import type { PostResponse } from '../modules/post/post.interfaces';
+import type { PostResponse } from '../modules/post/interfaces/post.interfaces';
 
 export type PostResolverResp = PostResponse & { user: IUser };

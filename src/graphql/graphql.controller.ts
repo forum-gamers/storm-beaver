@@ -23,12 +23,14 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { GlobalContext } from '../interfaces';
-import { USER_TYPEDEFS } from './typedefs/user.typedefs';
-import { UserResolver } from './resolvers/user.resolver';
+import { USER_TYPEDEFS } from './typedefs/user/user.typedefs';
+import { UserResolver } from './resolvers/user/user.resolver';
 import parseReq from '../middlewares/parseReq.middleware';
 import { config } from 'dotenv';
-import { PostResolver } from './resolvers/post.resolver';
-import { POST_TYPEDEFS } from './typedefs/post.typedefs';
+import { PostResolver } from './resolvers/post/post.resolver';
+import { POST_TYPEDEFS } from './typedefs/post/post.typedefs';
+import { LIKE_TYPEDEFS } from './typedefs/post/like.typedefs';
+import { LikeResolver } from './resolvers/post/like.resolver';
 
 config();
 
@@ -41,14 +43,16 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly userResolver: UserResolver,
     private readonly postResolver: PostResolver,
+    private readonly likeResolver: LikeResolver,
   ) {}
 
   private createSchema() {
     return makeExecutableSchema({
-      typeDefs: [USER_TYPEDEFS, POST_TYPEDEFS],
+      typeDefs: [USER_TYPEDEFS, POST_TYPEDEFS, LIKE_TYPEDEFS],
       resolvers: [
         this.userResolver.GenerateResolver(),
         this.postResolver.GenerateResolver(),
+        this.likeResolver.GenerateResolver(),
       ],
     });
   }

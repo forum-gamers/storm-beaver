@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { ResolverHelper } from '../graphql.helper';
-import { UserService } from '../../modules/user/user.service';
+import { ResolverHelper } from '../../graphql.helper';
+import { UserService } from '../../../modules/user/user.service';
 import type {
   GlobalContext,
   ResolverInitiate,
   ResolverObj,
-} from '../../interfaces';
+} from '../../../interfaces';
 import type {
   LoginInput,
   RegisterInput,
   UserParams,
-} from '../../modules/user/user.interfaces';
-import errorHandling from '../../middlewares/errorHandling.middleware';
-import type { FileInput } from '../../interfaces/request';
-import { ImageService } from '../../modules/image/image.service';
+} from '../../../modules/user/user.interfaces';
+import errorHandling from '../../../middlewares/errorHandling.middleware';
+import type { FileInput } from '../../../interfaces/request';
+import { ImageService } from '../../../modules/image/image.service';
 
 @Injectable()
 export class UserResolver extends ResolverHelper implements ResolverInitiate {
