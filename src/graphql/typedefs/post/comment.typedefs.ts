@@ -6,10 +6,10 @@ export const COMMENT_TYPEDEFS = `#graphql
     postId: String
     createdAt: String
     updatedAt: String
-    reply: [Reply]
+    reply: [IReply]
   }
 
-  type Reply {
+  type IReply {
     _id: String
     userId: String
     text: String

@@ -10,6 +10,8 @@ import { BookmarkService } from '../../modules/post/services/bookmark.service';
 import { BookmarkResolver } from './post/bookmark.resolver';
 import { CommentService } from '../../modules/post/services/comment.service';
 import { CommentResolver } from './post/comment.resolver';
+import { ReplyService } from '../../modules/post/services/reply.service';
+import { ReplyResolver } from './post/reply.resolver';
 
 @Module({
   providers: [
@@ -24,6 +26,8 @@ import { CommentResolver } from './post/comment.resolver';
     BookmarkResolver,
     CommentService,
     CommentResolver,
+    ReplyService,
+    ReplyResolver,
   ],
   exports: [
     UserResolver,
@@ -31,6 +35,7 @@ import { CommentResolver } from './post/comment.resolver';
     LikeResolver,
     BookmarkResolver,
     CommentResolver,
+    ReplyResolver,
   ],
 })
 export class ResolveModule {}

@@ -69,7 +69,6 @@ export class PostService extends GRPCBASE implements OnModuleInit {
         args,
         this.generateMetadata({ access_token: token }),
         (err, resp) => {
-          console.log(err);
           resolve(
             err
               ? {

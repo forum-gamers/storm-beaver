@@ -35,6 +35,8 @@ import { BOOKMARK_TYPEDEFS } from './typedefs/post/bookmark.typedefs';
 import { BookmarkResolver } from './resolvers/post/bookmark.resolver';
 import { COMMENT_TYPEDEFS } from './typedefs/post/comment.typedefs';
 import { CommentResolver } from './resolvers/post/comment.resolver';
+import { ReplyResolver } from './resolvers/post/reply.resolver';
+import { REPLY_TYPEDEFS } from './typedefs/post/reply.typedefs';
 
 config();
 
@@ -50,6 +52,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
     private readonly likeResolver: LikeResolver,
     private readonly bookmarkResolver: BookmarkResolver,
     private readonly commentResolver: CommentResolver,
+    private readonly replyResolver: ReplyResolver,
   ) {}
 
   private createSchema() {
@@ -60,6 +63,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
         LIKE_TYPEDEFS,
         BOOKMARK_TYPEDEFS,
         COMMENT_TYPEDEFS,
+        REPLY_TYPEDEFS,
       ],
       resolvers: [
         this.userResolver.GenerateResolver(),
@@ -67,6 +71,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
         this.likeResolver.GenerateResolver(),
         this.bookmarkResolver.GenerateResolver(),
         this.commentResolver.GenerateResolver(),
+        this.replyResolver.GenerateResolver(),
       ],
     });
   }
