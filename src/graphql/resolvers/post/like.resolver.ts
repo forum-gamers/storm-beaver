@@ -27,7 +27,8 @@ export class LikeResolver extends ResolverHelper implements ResolverInitiate {
           _: never,
           { postId }: LikeIdPayload,
           { access_token }: GlobalContext,
-        ) => await this.likeService.deleteLike({ postId }, access_token),
+        ) =>
+          (await this.likeService.deleteLike({ postId }, access_token)).message,
       },
     };
   }

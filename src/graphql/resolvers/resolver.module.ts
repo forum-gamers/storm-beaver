@@ -6,6 +6,8 @@ import { PostResolver } from './post/post.resolver';
 import { ImageService } from '../../modules/image/image.service';
 import { LikeService } from '../../modules/post/services/like.service';
 import { LikeResolver } from './post/like.resolver';
+import { BookmarkService } from '../../modules/post/services/bookmark.service';
+import { BookmarkResolver } from './post/bookmark.resolver';
 
 @Module({
   providers: [
@@ -16,7 +18,9 @@ import { LikeResolver } from './post/like.resolver';
     ImageService,
     LikeService,
     LikeResolver,
+    BookmarkService,
+    BookmarkResolver,
   ],
-  exports: [UserResolver, PostResolver, LikeResolver],
+  exports: [UserResolver, PostResolver, LikeResolver, BookmarkResolver],
 })
 export class ResolveModule {}

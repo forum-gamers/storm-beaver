@@ -31,6 +31,8 @@ import { PostResolver } from './resolvers/post/post.resolver';
 import { POST_TYPEDEFS } from './typedefs/post/post.typedefs';
 import { LIKE_TYPEDEFS } from './typedefs/post/like.typedefs';
 import { LikeResolver } from './resolvers/post/like.resolver';
+import { BOOKMARK_TYPEDEFS } from './typedefs/post/bookmark.typedefs';
+import { BookmarkResolver } from './resolvers/post/bookmark.resolver';
 
 config();
 
@@ -44,15 +46,22 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
     private readonly userResolver: UserResolver,
     private readonly postResolver: PostResolver,
     private readonly likeResolver: LikeResolver,
+    private readonly bookmarkResolver: BookmarkResolver,
   ) {}
 
   private createSchema() {
     return makeExecutableSchema({
-      typeDefs: [USER_TYPEDEFS, POST_TYPEDEFS, LIKE_TYPEDEFS],
+      typeDefs: [
+        USER_TYPEDEFS,
+        POST_TYPEDEFS,
+        LIKE_TYPEDEFS,
+        BOOKMARK_TYPEDEFS,
+      ],
       resolvers: [
         this.userResolver.GenerateResolver(),
         this.postResolver.GenerateResolver(),
         this.likeResolver.GenerateResolver(),
+        this.bookmarkResolver.GenerateResolver(),
       ],
     });
   }
