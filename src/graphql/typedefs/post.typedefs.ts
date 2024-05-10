@@ -58,11 +58,19 @@ export const POST_TYPEDEFS = `#graphql
     privacy: String
   }
 
+  input GetPostParamsById {
+    page: Int
+    limit: Int
+    userId: String!
+  }
+
   type Query {
     getPublicContent(args: getPostParams): [PostResponse]
     getMyPost(page: Int,limit: Int): [PostResponse]
     getLikedPost(page: Int,limit: Int): [PostResponse]
     getUserMedia(page: Int,limit: Int): [PostResponse]
+    getUserPostById(args: GetPostParamsById): [PostResponse]
+    getMediaByUserId(args: GetPostParamsById): [PostResponse]
   }
 
   type Mutation {

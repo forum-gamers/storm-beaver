@@ -13,6 +13,7 @@ import type {
   CreatePostInput,
   GetPostParams,
   Pagination,
+  PaginationWithUserId,
 } from '../../modules/post/post.interfaces';
 import type { PostResolverResp } from '../../interfaces/post.response';
 import errorHandling from '../../middlewares/errorHandling.middleware';
@@ -132,6 +133,87 @@ export class PostResolver extends ResolverHelper implements ResolverInitiate {
               ...el,
               user: users.find((user) => user.id === el.userId),
             }));
+          } catch (err) {
+            this.LogImportantError(err);
+            return [];
+          }
+        },
+        getUserPostById: async (
+          _: never,
+          {
+            args: { page = 1, limit = 20, userId },
+          }: { args: PaginationWithUserId },
+          { access_token }: GlobalContext,
+        ) => {
+          try {
+            const [{ data }, user] = await Promise.all([
+              this.postService.getUserPostById(
+                { page, limit, userId },
+                access_token,
+              ),
+              this.userService.getById({ id: userId }, access_token),
+            ]);
+            if (!data.length || !user)
+              throw new AppError({
+                message: 'data not found',
+                status: Status.NOT_FOUND,
+              });
+
+            return data.map((el) => ({ ...el, user }));
+          } catch (err) {
+            this.LogImportantError(err);
+            return [];
+          }
+        },
+        getMediaByUserId: async (
+          _: never,
+          {
+            args: { page = 1, limit = 20, userId },
+          }: { args: PaginationWithUserId },
+          { access_token }: GlobalContext,
+        ) => {
+          try {
+            const [{ data }, user] = await Promise.all([
+              this.postService.getMediaByUserId(
+                { page, limit, userId },
+                access_token,
+              ),
+              this.userService.getById({ id: userId }, access_token),
+            ]);
+            if (!data.length || !user)
+              throw new AppError({
+                message: 'data not found',
+                status: Status.NOT_FOUND,
+              });
+
+            return data.map((el) => ({ ...el, user }));
+          } catch (err) {
+            this.LogImportantError(err);
+            return [];
+          }
+        },
+        getUserLikedPost: async (
+          _: never,
+          {
+            args: { page = 1, limit = 20, userId },
+          }: { args: PaginationWithUserId },
+          { access_token }: GlobalContext,
+        ) => {
+          try {
+            const [{ data }, user] = await Promise.all([
+              this.postService.getUserLikedPost(
+                { page, limit, userId },
+                access_token,
+              ),
+              this.userService.getById({ id: userId }, access_token),
+            ]);
+            if (!data.length || !user)
+              throw new AppError({
+                message: 'data not found',
+                status: Status.NOT_FOUND,
+              });
+
+            return data.map((el) => ({ ...el, user }));
           } catch (err) {
             this.LogImportantError(err);
             return [];
