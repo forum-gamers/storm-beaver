@@ -7,7 +7,9 @@ import type {
   IBookmarkService,
   IdPayload,
   Messages,
+  PaginationWithPostId,
   PostIdPayload,
+  RespWithMetadata,
 } from '../interfaces/bookmark.interfaces';
 
 @Injectable()
@@ -52,6 +54,22 @@ export class BookmarkService extends GRPCBASE implements OnModuleInit {
         (err, resp) => {
           if (err) reject(this.convertError(err));
 
+          resolve(resp);
+        },
+      );
+    });
+  }
+
+  public async findMyBookmark(
+    args: PaginationWithPostId,
+    access_token: string,
+  ) {
+    return new Promise<RespWithMetadata>((resolve, reject) => {
+      this.bookmarkService.GetMyBookmarks(
+        args,
+        this.generateMetadata({ access_token }),
+        (err, resp) => {
+          if (err) reject(this.convertError(err));
           resolve(resp);
         },
       );
