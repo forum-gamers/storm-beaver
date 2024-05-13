@@ -49,5 +49,6 @@ export const USER_TYPEDEFS = `#graphql
     login(payload: LoginInput!): String!
     changeProfile(payload: FileInput!): String!
     changeBackground(payload: FileInput!): String!
+    changeVerified(token: String!): String
   }
 `;

@@ -113,6 +113,8 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             throw errorHandling(err);
           }
         },
+        changeVerified: async (_: never, { token }: { token: string }) =>
+          await this.userService.changeVerified({ token }),
       },
     };
   }

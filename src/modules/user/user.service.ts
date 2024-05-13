@@ -8,6 +8,7 @@ import type {
   LoginInput,
   MultipleUserParams,
   RegisterInput,
+  TokenInput,
   UserParams,
 } from './user.interfaces';
 import { config } from 'dotenv';
@@ -118,6 +119,20 @@ export class UserService extends GRPCBASE implements OnModuleInit {
       this.userService.ChangeBackgroundImg(
         args,
         this.generateMetadata({ access_token }),
+        (err, resp) => {
+          if (err) reject(this.convertError(err));
+
+          resolve(resp.message);
+        },
+      );
+    });
+  }
+
+  public async changeVerified(args: TokenInput) {
+    return new Promise<string>((resolve, reject) => {
+      this.userService.ChangeVerified(
+        args,
+        this.generateMetadata(),
         (err, resp) => {
           if (err) reject(this.convertError(err));
 

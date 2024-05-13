@@ -62,6 +62,10 @@ export interface ChangeProfileInput {
   fileId: string;
 }
 
+export interface TokenInput {
+  token: string;
+}
+
 export interface IUserService extends ServiceClient {
   GetMultipleUser: GRPC_UNARY<MultipleUserParams, UserDatas>;
   Me: GRPC_UNARY<NoArguments, UserData>;
@@ -70,4 +74,5 @@ export interface IUserService extends ServiceClient {
   Login: GRPC_UNARY<LoginInput, TokenResponse>;
   ChangeProfileImg: GRPC_UNARY<ChangeProfileInput, Message>;
   ChangeBackgroundImg: GRPC_UNARY<ChangeProfileInput, Message>;
+  ChangeVerified: GRPC_UNARY<TokenInput, Message>;
 }
