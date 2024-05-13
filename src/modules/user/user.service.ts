@@ -55,7 +55,7 @@ export class UserService extends GRPCBASE implements OnModuleInit {
         {},
         this.generateMetadata({ access_token: token }),
         (err, response) => {
-          if (err) reject(this.convertError(err));
+          if (err) return reject(this.convertError(err));
 
           resolve(response?.data);
         },
@@ -69,7 +69,7 @@ export class UserService extends GRPCBASE implements OnModuleInit {
         params,
         this.generateMetadata({ access_token: token }),
         (err, response) => {
-          if (err) reject(this.convertError(err));
+          if (err) return reject(this.convertError(err));
 
           resolve(response?.data);
         },
@@ -80,7 +80,7 @@ export class UserService extends GRPCBASE implements OnModuleInit {
   public async register(args: RegisterInput) {
     return new Promise<IUser>((resolve, reject) => {
       this.userService.Register(args, this.generateMetadata(), (err, resp) => {
-        if (err) reject(this.convertError(err));
+        if (err) return reject(this.convertError(err));
 
         resolve(resp?.data);
       });
@@ -90,7 +90,7 @@ export class UserService extends GRPCBASE implements OnModuleInit {
   public async login(args: LoginInput) {
     return new Promise<string>((resolve, reject) => {
       this.userService.Login(args, this.generateMetadata(), (err, resp) => {
-        if (err) reject(this.convertError(err));
+        if (err) return reject(this.convertError(err));
 
         resolve(resp?.token);
       });
@@ -103,7 +103,7 @@ export class UserService extends GRPCBASE implements OnModuleInit {
         args,
         this.generateMetadata({ access_token }),
         (err, resp) => {
-          if (err) reject(this.convertError(err));
+          if (err) return reject(this.convertError(err));
 
           resolve(resp.message);
         },
@@ -120,7 +120,7 @@ export class UserService extends GRPCBASE implements OnModuleInit {
         args,
         this.generateMetadata({ access_token }),
         (err, resp) => {
-          if (err) reject(this.convertError(err));
+          if (err) return reject(this.convertError(err));
 
           resolve(resp.message);
         },
@@ -134,9 +134,9 @@ export class UserService extends GRPCBASE implements OnModuleInit {
         args,
         this.generateMetadata(),
         (err, resp) => {
-          if (err) reject(this.convertError(err));
+          if (err) return reject(this.convertError(err));
 
-          resolve(resp.message);
+          resolve(resp?.message);
         },
       );
     });

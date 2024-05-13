@@ -38,7 +38,7 @@ export class BookmarkService extends GRPCBASE implements OnModuleInit {
         args,
         this.generateMetadata({ access_token }),
         (err, resp) => {
-          if (err) reject(this.convertError(err));
+          if (err) return reject(this.convertError(err));
 
           resolve(resp);
         },
@@ -52,7 +52,7 @@ export class BookmarkService extends GRPCBASE implements OnModuleInit {
         args,
         this.generateMetadata({ access_token }),
         (err, resp) => {
-          if (err) reject(this.convertError(err));
+          if (err) return reject(this.convertError(err));
 
           resolve(resp);
         },
@@ -69,7 +69,7 @@ export class BookmarkService extends GRPCBASE implements OnModuleInit {
         args,
         this.generateMetadata({ access_token }),
         (err, resp) => {
-          if (err) reject(this.convertError(err));
+          if (err) return reject(this.convertError(err));
           resolve(resp);
         },
       );
