@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { ResolverHelper } from '../../graphql.helper';
-import { UserService } from '../../../modules/user/user.service';
+import { UserService } from '../../../modules/user/services/user.service';
 import type {
   GlobalContext,
   ResolverInitiate,
   ResolverObj,
 } from '../../../interfaces';
 import type {
+  EmailInput,
   LoginInput,
   RegisterInput,
   UserParams,
-} from '../../../modules/user/user.interfaces';
+} from '../../../modules/user/interfaces/user.interfaces';
 import errorHandling from '../../../middlewares/errorHandling.middleware';
 import type { FileInput } from '../../../interfaces/request';
 import { ImageService } from '../../../modules/image/services/image.service';
@@ -119,6 +120,8 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
         },
         changeVerified: async (_: never, { token }: { token: string }) =>
           await this.userService.changeVerified({ token }),
+        resendEmailVerification: async (_: never, { email }: EmailInput) =>
+          await this.userService.resendEmail({ email }),
       },
     };
   }

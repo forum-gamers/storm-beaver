@@ -6,7 +6,7 @@ import type {
   ResolverInitiate,
   ResolverObj,
 } from '../../../interfaces';
-import { UserService } from '../../../modules/user/user.service';
+import { UserService } from '../../../modules/user/services/user.service';
 import { PostService } from '../../../modules/post/services/post.service';
 import { ImageService } from '../../../modules/image/services/image.service';
 import type {
@@ -236,7 +236,7 @@ export class PostResolver extends ResolverHelper implements ResolverInitiate {
         ) => {
           try {
             const files: FileHeader[] = [];
-            if (!!fileInput.length) {
+            if (fileInput?.length) {
               if (fileInput.length > 4)
                 throw new AppError({
                   message: 'max upload file is 4',
@@ -299,7 +299,7 @@ export class PostResolver extends ResolverHelper implements ResolverInitiate {
             access_token,
           );
 
-          if (!!datas.length)
+          if (datas.length)
             this.imageService.bulkDelete({ file_ids: datas }, access_token);
 
           return 'success';

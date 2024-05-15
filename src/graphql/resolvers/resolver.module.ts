@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UserService } from '../../modules/user/user.service';
+import { UserService } from '../../modules/user/services/user.service';
 import { UserResolver } from './user/user.resolver';
 import { PostService } from '../../modules/post/services/post.service';
 import { PostResolver } from './post/post.resolver';

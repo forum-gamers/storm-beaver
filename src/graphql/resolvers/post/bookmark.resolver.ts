@@ -13,7 +13,7 @@ import type {
 import { BookmarkService } from '../../../modules/post/services/bookmark.service';
 import AppError from '../../../base/error.base';
 import { Status } from '@grpc/grpc-js/build/src/constants';
-import { UserService } from '../../../modules/user/user.service';
+import { UserService } from '../../../modules/user/services/user.service';
 
 @Injectable()
 export class BookmarkResolver

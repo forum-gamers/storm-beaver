@@ -1,5 +1,5 @@
 import type { ServiceClient } from '@grpc/grpc-js/build/src/make-client';
-import type { GRPC_UNARY } from '../../interfaces';
+import type { GRPC_UNARY } from '../../../interfaces';
 
 export interface IUser {
   id: string;
@@ -66,6 +66,10 @@ export interface TokenInput {
   token: string;
 }
 
+export interface EmailInput {
+  email: string;
+}
+
 export interface IUserService extends ServiceClient {
   GetMultipleUser: GRPC_UNARY<MultipleUserParams, UserDatas>;
   Me: GRPC_UNARY<NoArguments, UserData>;
@@ -75,4 +79,5 @@ export interface IUserService extends ServiceClient {
   ChangeProfileImg: GRPC_UNARY<ChangeProfileInput, Message>;
   ChangeBackgroundImg: GRPC_UNARY<ChangeProfileInput, Message>;
   ChangeVerified: GRPC_UNARY<TokenInput, Message>;
+  ResendEmailVerification: GRPC_UNARY<EmailInput, Message>;
 }

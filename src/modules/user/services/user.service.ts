@@ -3,6 +3,7 @@ import { join } from 'path';
 import { credentials } from '@grpc/grpc-js';
 import type {
   ChangeProfileInput,
+  EmailInput,
   IUser,
   IUserService,
   LoginInput,
@@ -10,9 +11,9 @@ import type {
   RegisterInput,
   TokenInput,
   UserParams,
-} from './user.interfaces';
+} from '../interfaces/user.interfaces';
 import { config } from 'dotenv';
-import { GRPCBASE } from '../../base/grpc.base.service';
+import { GRPCBASE } from '../../../base/grpc.base.service';
 
 config();
 
@@ -131,6 +132,20 @@ export class UserService extends GRPCBASE implements OnModuleInit {
   public async changeVerified(args: TokenInput) {
     return new Promise<string>((resolve, reject) => {
       this.userService.ChangeVerified(
+        args,
+        this.generateMetadata(),
+        (err, resp) => {
+          if (err) return reject(this.convertError(err));
+
+          resolve(resp?.message);
+        },
+      );
+    });
+  }
+
+  public async resendEmail(args: EmailInput) {
+    return new Promise<string>((resolve, reject) => {
+      this.userService.ResendEmailVerification(
         args,
         this.generateMetadata(),
         (err, resp) => {

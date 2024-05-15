@@ -50,5 +50,6 @@ export const USER_TYPEDEFS = `#graphql
     changeProfile(payload: FileInput!): String!
     changeBackground(payload: FileInput!): String!
     changeVerified(token: String!): String
+    resendEmailVerification(email: String!): String
   }
 `;
