@@ -14,6 +14,8 @@ import { ReplyService } from '../../modules/post/services/reply.service';
 import { ReplyResolver } from './post/reply.resolver';
 import { CommunityService } from '../../modules/community/services/community.service';
 import { CommunityResolver } from './community/community.resolver';
+import { MemberService } from '../../modules/community/services/member.service';
+import { MemberResolver } from './community/member.resolver';
 
 @Module({
   providers: [
@@ -32,6 +34,8 @@ import { CommunityResolver } from './community/community.resolver';
     ReplyResolver,
     CommunityService,
     CommunityResolver,
+    MemberService,
+    MemberResolver,
   ],
   exports: [
     UserResolver,
@@ -41,6 +45,7 @@ import { CommunityResolver } from './community/community.resolver';
     CommentResolver,
     ReplyResolver,
     CommunityResolver,
+    MemberResolver,
   ],
 })
 export class ResolverModule {}

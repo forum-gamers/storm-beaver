@@ -39,6 +39,8 @@ import { ReplyResolver } from './resolvers/post/reply.resolver';
 import { REPLY_TYPEDEFS } from './typedefs/post/reply.typedefs';
 import { COMMUNITY_TYPEDEFS } from './typedefs/community/community.typedefs';
 import { CommunityResolver } from './resolvers/community/community.resolver';
+import { MEMBER_TYPEDEFS } from './typedefs/community/member.typedefs';
+import { MemberResolver } from './resolvers/community/member.resolver';
 
 config();
 
@@ -56,6 +58,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
     private readonly commentResolver: CommentResolver,
     private readonly replyResolver: ReplyResolver,
     private readonly communityResolver: CommunityResolver,
+    private readonly memberResolver: MemberResolver,
   ) {}
 
   private createSchema() {
@@ -68,6 +71,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
         COMMENT_TYPEDEFS,
         REPLY_TYPEDEFS,
         COMMUNITY_TYPEDEFS,
+        MEMBER_TYPEDEFS,
       ],
       resolvers: [
         this.userResolver.GenerateResolver(),
@@ -76,6 +80,8 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
         this.bookmarkResolver.GenerateResolver(),
         this.commentResolver.GenerateResolver(),
         this.replyResolver.GenerateResolver(),
+        this.communityResolver.GenerateResolver(),
+        this.memberResolver.GenerateResolver(),
       ],
     });
   }
