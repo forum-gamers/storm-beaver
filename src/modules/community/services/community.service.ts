@@ -12,6 +12,9 @@ import type {
 import { GRPCBASE } from '../../../base/grpc.base.service';
 import { join } from 'path';
 import { credentials } from '@grpc/grpc-js';
+import { config } from 'dotenv';
+
+config();
 
 @Injectable()
 export class CommunityService extends GRPCBASE implements OnModuleInit {

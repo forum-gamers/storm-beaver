@@ -41,6 +41,8 @@ import { COMMUNITY_TYPEDEFS } from './typedefs/community/community.typedefs';
 import { CommunityResolver } from './resolvers/community/community.resolver';
 import { MEMBER_TYPEDEFS } from './typedefs/community/member.typedefs';
 import { MemberResolver } from './resolvers/community/member.resolver';
+import { VendorResolver } from './resolvers/user/vendor.resolver';
+import { VENDOR_TYPEDEFS } from './typedefs/user/vendor.typedefs';
 
 config();
 
@@ -59,6 +61,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
     private readonly replyResolver: ReplyResolver,
     private readonly communityResolver: CommunityResolver,
     private readonly memberResolver: MemberResolver,
+    private readonly vendorResolver: VendorResolver,
   ) {}
 
   private createSchema() {
@@ -72,6 +75,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
         REPLY_TYPEDEFS,
         COMMUNITY_TYPEDEFS,
         MEMBER_TYPEDEFS,
+        VENDOR_TYPEDEFS,
       ],
       resolvers: [
         this.userResolver.GenerateResolver(),

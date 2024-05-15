@@ -11,6 +11,9 @@ import type {
   PostIdPayload,
   RespWithMetadata,
 } from '../interfaces/bookmark.interfaces';
+import { config } from 'dotenv';
+
+config();
 
 @Injectable()
 export class BookmarkService extends GRPCBASE implements OnModuleInit {

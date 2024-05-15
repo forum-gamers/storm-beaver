@@ -16,6 +16,8 @@ import { CommunityService } from '../../modules/community/services/community.ser
 import { CommunityResolver } from './community/community.resolver';
 import { MemberService } from '../../modules/community/services/member.service';
 import { MemberResolver } from './community/member.resolver';
+import { VendorService } from '../../modules/user/services/vendor.service';
+import { VendorResolver } from './user/vendor.resolver';
 
 @Module({
   providers: [
@@ -36,6 +38,8 @@ import { MemberResolver } from './community/member.resolver';
     CommunityResolver,
     MemberService,
     MemberResolver,
+    VendorService,
+    VendorResolver,
   ],
   exports: [
     UserResolver,
@@ -46,6 +50,7 @@ import { MemberResolver } from './community/member.resolver';
     ReplyResolver,
     CommunityResolver,
     MemberResolver,
+    VendorResolver,
   ],
 })
 export class ResolverModule {}

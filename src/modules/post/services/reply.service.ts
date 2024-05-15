@@ -9,6 +9,9 @@ import {
   IReplyService,
   Messages,
 } from '../interfaces/reply.interfaces';
+import { config } from 'dotenv';
+
+config();
 
 @Injectable()
 export class ReplyService extends GRPCBASE implements OnModuleInit {

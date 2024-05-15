@@ -12,6 +12,9 @@ import type {
 import { join } from 'path';
 import { credentials } from '@grpc/grpc-js';
 import type { FileUploadInput } from '../../../interfaces/request';
+import { config } from 'dotenv';
+
+config();
 
 @Injectable()
 export class ImageService extends GRPCBASE implements OnModuleInit {

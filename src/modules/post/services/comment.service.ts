@@ -11,6 +11,9 @@ import type {
 } from '../interfaces/comment.interfaces';
 import { join } from 'path';
 import { credentials } from '@grpc/grpc-js';
+import { config } from 'dotenv';
+
+config();
 
 @Injectable()
 export class CommentService extends GRPCBASE implements OnModuleInit {

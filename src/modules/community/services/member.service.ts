@@ -7,6 +7,9 @@ import type {
 } from '../interfaces/member.interface';
 import { join } from 'path';
 import { credentials } from '@grpc/grpc-js';
+import { config } from 'dotenv';
+
+config();
 
 @Injectable()
 export class MemberService extends GRPCBASE implements OnModuleInit {

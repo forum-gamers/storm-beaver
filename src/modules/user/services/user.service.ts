@@ -27,7 +27,7 @@ export class UserService extends GRPCBASE implements OnModuleInit {
 
   private loadUserDefinition() {
     const Service = this.loadService(
-      join(__dirname, './proto/user.proto'),
+      join(__dirname, '../proto/user.proto'),
       'user',
       'UserService',
     );

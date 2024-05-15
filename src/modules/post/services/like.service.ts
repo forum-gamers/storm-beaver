@@ -8,6 +8,9 @@ import type {
   LikeIdPayload,
   Message,
 } from '../interfaces/like.interfaces';
+import { config } from 'dotenv';
+
+config();
 
 @Injectable()
 export class LikeService extends GRPCBASE implements OnModuleInit {

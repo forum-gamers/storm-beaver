@@ -14,6 +14,9 @@ import type {
 } from '../interfaces/post.interfaces';
 import { GRPCBASE } from '../../../base/grpc.base.service';
 import { join } from 'path';
+import { config } from 'dotenv';
+
+config();
 
 @Injectable()
 export class PostService extends GRPCBASE implements OnModuleInit {
