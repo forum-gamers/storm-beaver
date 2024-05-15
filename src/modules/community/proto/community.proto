@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package community;
+
+option go_package = "./generated/community";
+
+message CreateCommunityInput {
+  string name = 1;
+  string imageUrl = 2;
+  string imageId = 3;
+  string desc = 4;
+  string backgroundUrl = 5;
+  string backgroundId = 6;
+}
+
+message Community {
+  string id = 1;
+  string name = 2;
+  string imageUrl = 3;
+  string imageId = 4;
+  string description = 5;
+  string owner = 6;
+  string createdAt = 7;
+  string updatedAt = 8;
+  string backgroundUrl = 9;
+  string backgroundId = 10;
+}
+
+message ImageIdResp {
+  string imageId = 1;
+  string backgroundId = 2;
+}
+
+message CommunityIdInput {
+  string communityId = 1;
+}
+
+message UpdateImgInput {
+  string url = 1;
+  string id = 2;
+  string communityId = 3;
+}
+
+message TextInput {
+  string text = 1;
+  string communityId = 2;
+}
+
+message ChangeOwnershipInput {
+  string communityId = 1;
+  string targetId = 2;
+}
+
+service CommunityService {
+  rpc CreateCommunity(CreateCommunityInput) returns (Community) {}
+  rpc DeleteCommunity(CommunityIdInput) returns (ImageIdResp) {}
+  rpc UpdateImage(UpdateImgInput) returns (Community) {}
+  rpc UpdateBackground(UpdateImgInput) returns (Community) {}
+  rpc UpdateDesc(TextInput) returns (Community) {}
+  rpc ChangeOwnership(ChangeOwnershipInput) returns (Community) {}
+  rpc FindById(CommunityIdInput) returns (Community) {}
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package member;
+
+option go_package = "./generated/member";
+
+message CommunityIdInput {
+  string communityId = 1;
+}
+
+message Message {
+  string message = 1;
+}
+
+service MemberService {
+  rpc JoinCommunity(CommunityIdInput) returns (Message) {}
+  rpc LeaveCommunity(CommunityIdInput) returns (Message) {}
+}

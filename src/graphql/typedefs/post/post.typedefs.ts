@@ -39,12 +39,6 @@ export const POST_TYPEDEFS = `#graphql
     url: String
   }
 
-  type TopTag {
-    _id: String
-    count: Int
-    posts: [String]
-  }
-
   input getPostParams {
     tags: [String]
     userIds: [String]
@@ -78,6 +72,7 @@ export const POST_TYPEDEFS = `#graphql
     getUserPostById(args: GetPostParamsById!): [PostResponse]
     getMediaByUserId(args: GetPostParamsById!): [PostResponse]
     getUserLikedPost(args: GetPostParamsById!): [PostResponse]
+
   }
 
   type Mutation {

@@ -13,7 +13,11 @@ import type {
 } from '../../../modules/user/user.interfaces';
 import errorHandling from '../../../middlewares/errorHandling.middleware';
 import type { FileInput } from '../../../interfaces/request';
-import { ImageService } from '../../../modules/image/image.service';
+import { ImageService } from '../../../modules/image/services/image.service';
+import {
+  USER_BACKGROUND_FOLDER,
+  USER_PROFILE_FOLDER,
+} from '../../../constants/folder';
 
 @Injectable()
 export class UserResolver extends ResolverHelper implements ResolverInitiate {
@@ -58,7 +62,7 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             const { file_id, url } = await this.imageService.uploadImg(
               {
                 filename,
-                folder: 'user-profile',
+                folder: USER_PROFILE_FOLDER,
                 content: base64,
               },
               access_token,
@@ -90,7 +94,7 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             const { file_id, url } = await this.imageService.uploadImg(
               {
                 filename,
-                folder: 'user-background',
+                folder: USER_BACKGROUND_FOLDER,
                 content: base64,
               },
               access_token,

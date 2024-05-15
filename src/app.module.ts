@@ -3,9 +3,10 @@ import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { GraphqlController } from './graphql/graphql.controller';
 import { UserModule } from './modules/user/user.module';
-import { ResolveModule } from './graphql/resolvers/resolver.module';
+import { ResolverModule } from './graphql/resolvers/resolver.module';
 import { ImageModule } from './modules/image/image.module';
 import { PostModule } from './modules/post/post.module';
+import { CommunityModule } from './modules/community/community.module';
 
 @Module({
   imports: [
@@ -22,9 +23,10 @@ import { PostModule } from './modules/post/post.module';
       ],
     }),
     UserModule,
-    ResolveModule,
+    ResolverModule,
     ImageModule,
     PostModule,
+    CommunityModule,
   ],
   controllers: [GraphqlController],
 })

@@ -1,6 +1,6 @@
 import type { ServiceClient } from '@grpc/grpc-js/build/src/make-client';
-import type { GRPC_UNARY } from '../../interfaces';
-import type { FileUploadInput } from '../../interfaces/request';
+import type { GRPC_UNARY } from '../../../interfaces';
+import type { FileUploadInput } from '../../../interfaces/request';
 
 export interface FileHeader extends FileHeaderWithoutFolder {
   folder: string;

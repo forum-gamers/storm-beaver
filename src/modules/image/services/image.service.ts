@@ -1,5 +1,5 @@
 import { Injectable, type OnModuleInit } from '@nestjs/common';
-import { GRPCBASE } from '../../base/grpc.base.service';
+import { GRPCBASE } from '../../../base/grpc.base.service';
 import type {
   DeleteFileInput,
   IImageService,
@@ -8,16 +8,10 @@ import type {
   MultipleFileIdInput,
   MultipleUploadFileResult,
   UploadFileResult,
-} from './image.interface';
+} from '../interfaces/image.interface';
 import { join } from 'path';
-import {
-  loadPackageDefinition,
-  credentials,
-  type ServiceClientConstructor,
-  type GrpcObject,
-} from '@grpc/grpc-js';
-import { loadSync } from '@grpc/proto-loader';
-import type { FileUploadInput } from '../../interfaces/request';
+import { credentials } from '@grpc/grpc-js';
+import type { FileUploadInput } from '../../../interfaces/request';
 
 @Injectable()
 export class ImageService extends GRPCBASE implements OnModuleInit {
@@ -27,17 +21,11 @@ export class ImageService extends GRPCBASE implements OnModuleInit {
   }
 
   private loadImageDefinition() {
-    const Service = (
-      loadPackageDefinition(
-        loadSync(join(__dirname, './proto/image.proto'), {
-          keepCase: true,
-          longs: String,
-          enums: String,
-          defaults: true,
-          oneofs: true,
-        }),
-      ).image as GrpcObject
-    ).Image as ServiceClientConstructor;
+    const Service = this.loadService(
+      join(__dirname, '../proto/image.proto'),
+      'image',
+      'Image',
+    );
 
     this.imageService = new Service(
       process.env.GRPC_IMAGE_SERVICE ?? 'localhost:50060',
@@ -51,7 +39,7 @@ export class ImageService extends GRPCBASE implements OnModuleInit {
         args,
         this.generateMetadata({ access_token }),
         (err, resp) => {
-          if (err) reject(err);
+          if (err) return reject(err);
 
           resolve(resp);
         },
@@ -65,7 +53,7 @@ export class ImageService extends GRPCBASE implements OnModuleInit {
         args,
         this.generateMetadata({ access_token }),
         (err, resp) => {
-          if (err) reject(this.convertError(err));
+          if (err) return reject(this.convertError(err));
           resolve(resp?.message ?? '');
         },
       );
@@ -78,7 +66,7 @@ export class ImageService extends GRPCBASE implements OnModuleInit {
         args,
         this.generateMetadata({ access_token }),
         (err, resp) => {
-          if (err) reject(this.convertError(err));
+          if (err) return reject(this.convertError(err));
 
           resolve(resp);
         },
@@ -92,7 +80,7 @@ export class ImageService extends GRPCBASE implements OnModuleInit {
         args,
         this.generateMetadata({ access_token }),
         (err, resp) => {
-          if (err) reject(this.convertError(err));
+          if (err) return reject(this.convertError(err));
 
           resolve(resp);
         },

@@ -8,7 +8,7 @@ import type {
 } from '../../../interfaces';
 import { UserService } from '../../../modules/user/user.service';
 import { PostService } from '../../../modules/post/services/post.service';
-import { ImageService } from '../../../modules/image/image.service';
+import { ImageService } from '../../../modules/image/services/image.service';
 import type {
   CreatePostInput,
   GetPostParams,
@@ -19,6 +19,7 @@ import type { PostResolverResp } from '../../../interfaces/post.response';
 import errorHandling from '../../../middlewares/errorHandling.middleware';
 import AppError from '../../../base/error.base';
 import { Status } from '@grpc/grpc-js/build/src/constants';
+import { POST_FOLDER } from '../../../constants/folder';
 
 @Injectable()
 export class PostResolver extends ResolverHelper implements ResolverInitiate {
@@ -244,7 +245,7 @@ export class PostResolver extends ResolverHelper implements ResolverInitiate {
 
               const { datas } = await this.imageService.bulkUpload(
                 {
-                  folder: 'post',
+                  folder: POST_FOLDER,
                   files: fileInput.map((el) => ({
                     content: el.base64,
                     filename: el.filename,
