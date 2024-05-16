@@ -220,6 +220,11 @@ export class PostResolver extends ResolverHelper implements ResolverInitiate {
             return [];
           }
         },
+        getPostById: async (
+          _: never,
+          { id }: { id: string },
+          { access_token }: GlobalContext,
+        ) => await this.postService.findById({ _id: id }, access_token),
       },
       Mutation: {
         createPost: async (

@@ -72,6 +72,7 @@ export const POST_TYPEDEFS = `#graphql
     getUserPostById(args: GetPostParamsById!): [PostResponse]
     getMediaByUserId(args: GetPostParamsById!): [PostResponse]
     getUserLikedPost(args: GetPostParamsById!): [PostResponse]
+    getPostById(id: String!): PostResponse
 
   }
 

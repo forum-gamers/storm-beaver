@@ -106,4 +106,5 @@ export interface IPostService extends ServiceClient {
   GetMediaByUserId: GRPC_UNARY<PaginationWithUserId, PostRespWithMetadata>;
   GetUserLikedPost: GRPC_UNARY<PaginationWithUserId, PostRespWithMetadata>;
   GetTopTags: GRPC_UNARY<Pagination, TopTagResp>;
+  FindById: GRPC_UNARY<PostIdPayload, PostResponse>;
 }

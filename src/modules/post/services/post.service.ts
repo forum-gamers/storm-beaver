@@ -9,6 +9,7 @@ import type {
   Post,
   PostForm,
   PostIdPayload,
+  PostResponse,
   PostRespWithMetadata,
   TopTagResp,
 } from '../interfaces/post.interfaces';
@@ -227,6 +228,19 @@ export class PostService extends GRPCBASE implements OnModuleInit {
         this.generateMetadata({ access_token: token }),
         (err, resp) => {
           resolve({ datas: err ? [] : resp.datas });
+        },
+      );
+    });
+  }
+
+  public async findById(args: PostIdPayload, access_token: string) {
+    return new Promise<PostResponse>((resolve, reject) => {
+      this.postService.FindById(
+        args,
+        this.generateMetadata({ access_token }),
+        (err, resp) => {
+          if (err) return reject(this.convertError(err));
+          resolve(resp);
         },
       );
     });
