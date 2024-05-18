@@ -18,6 +18,7 @@ import { MemberService } from '../../modules/community/services/member.service';
 import { MemberResolver } from './community/member.resolver';
 import { VendorService } from '../../modules/user/services/vendor.service';
 import { VendorResolver } from './user/vendor.resolver';
+import { WalletService } from '../../modules/transactions/services/wallet.service';
 
 @Module({
   providers: [
@@ -40,6 +41,7 @@ import { VendorResolver } from './user/vendor.resolver';
     MemberResolver,
     VendorService,
     VendorResolver,
+    WalletService,
   ],
   exports: [
     UserResolver,

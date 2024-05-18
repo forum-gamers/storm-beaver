@@ -6,6 +6,7 @@ declare global {
       GRPC_POST_SERVICE: string;
       GRPC_IMAGE_SERVICE: string;
       GRPC_COMMUNITY_SERVICE: string;
+      GRPC_TRANSACTION_SERVICE: string;
       NODE_ENV: 'development' | 'test' | 'production';
     }
   }

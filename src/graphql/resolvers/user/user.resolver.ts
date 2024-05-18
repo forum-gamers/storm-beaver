@@ -19,12 +19,14 @@ import {
   USER_BACKGROUND_FOLDER,
   USER_PROFILE_FOLDER,
 } from '../../../constants/folder';
+import { WalletService } from '../../../modules/transactions/services/wallet.service';
 
 @Injectable()
 export class UserResolver extends ResolverHelper implements ResolverInitiate {
   constructor(
     private readonly userService: UserService,
     private readonly imageService: ImageService,
+    private readonly walletService: WalletService,
   ) {
     super();
   }
@@ -40,7 +42,11 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
       Mutation: {
         register: async (_: never, { payload }: { payload: RegisterInput }) => {
           try {
-            return await this.userService.register(payload);
+            const { data, token } = await this.userService.register(payload);
+
+            await this.walletService.createWallet({}, token);
+
+            return data;
           } catch (err) {
             this.LogImportantError(err);
             throw errorHandling(err);

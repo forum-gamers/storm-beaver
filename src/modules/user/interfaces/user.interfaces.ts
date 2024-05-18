@@ -70,11 +70,16 @@ export interface EmailInput {
   email: string;
 }
 
+export interface RegisterResp {
+  data: IUser;
+  token: string;
+}
+
 export interface IUserService extends ServiceClient {
   GetMultipleUser: GRPC_UNARY<MultipleUserParams, UserDatas>;
   Me: GRPC_UNARY<NoArguments, UserData>;
   GetUserById: GRPC_UNARY<UserParams, UserData>;
-  Register: GRPC_UNARY<RegisterInput, UserData>;
+  Register: GRPC_UNARY<RegisterInput, RegisterResp>;
   Login: GRPC_UNARY<LoginInput, TokenResponse>;
   ChangeProfileImg: GRPC_UNARY<ChangeProfileInput, Message>;
   ChangeBackgroundImg: GRPC_UNARY<ChangeProfileInput, Message>;

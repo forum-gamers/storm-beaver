@@ -7,6 +7,7 @@ import { ResolverModule } from './graphql/resolvers/resolver.module';
 import { ImageModule } from './modules/image/image.module';
 import { PostModule } from './modules/post/post.module';
 import { CommunityModule } from './modules/community/community.module';
+import { TransactionModule } from './modules/transactions/transaction.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CommunityModule } from './modules/community/community.module';
     ImageModule,
     PostModule,
     CommunityModule,
+    TransactionModule,
   ],
   controllers: [GraphqlController],
 })

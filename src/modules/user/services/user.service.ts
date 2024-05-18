@@ -9,6 +9,7 @@ import type {
   LoginInput,
   MultipleUserParams,
   RegisterInput,
+  RegisterResp,
   TokenInput,
   UserParams,
 } from '../interfaces/user.interfaces';
@@ -79,11 +80,11 @@ export class UserService extends GRPCBASE implements OnModuleInit {
   }
 
   public async register(args: RegisterInput) {
-    return new Promise<IUser>((resolve, reject) => {
+    return new Promise<RegisterResp>((resolve, reject) => {
       this.userService.Register(args, this.generateMetadata(), (err, resp) => {
         if (err) return reject(this.convertError(err));
 
-        resolve(resp?.data);
+        resolve(resp);
       });
     });
   }
