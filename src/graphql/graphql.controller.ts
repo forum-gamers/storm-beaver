@@ -86,6 +86,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
         this.replyResolver.GenerateResolver(),
         this.communityResolver.GenerateResolver(),
         this.memberResolver.GenerateResolver(),
+        this.vendorResolver.GenerateResolver(),
       ],
     });
   }

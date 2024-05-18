@@ -8,6 +8,8 @@ declare global {
       GRPC_COMMUNITY_SERVICE: string;
       GRPC_TRANSACTION_SERVICE: string;
       NODE_ENV: 'development' | 'test' | 'production';
+      MIDTRANS_SERVER_KEY: string;
+      MIDTRANS_CLIENT_KEY: string;
     }
   }
 }

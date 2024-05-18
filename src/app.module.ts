@@ -8,6 +8,7 @@ import { ImageModule } from './modules/image/image.module';
 import { PostModule } from './modules/post/post.module';
 import { CommunityModule } from './modules/community/community.module';
 import { TransactionModule } from './modules/transactions/transaction.module';
+import { ThirdPartyModule } from './third-party/thirdparty.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { TransactionModule } from './modules/transactions/transaction.module';
     PostModule,
     CommunityModule,
     TransactionModule,
+    ThirdPartyModule,
   ],
   controllers: [GraphqlController],
 })
