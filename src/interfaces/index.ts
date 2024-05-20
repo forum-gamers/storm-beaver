@@ -1,6 +1,7 @@
 import type { BaseContext } from '@apollo/server';
 import type { Metadata } from '@grpc/grpc-js';
 import GrpcError from '../base/grpcError.base';
+import type { EnablePayment } from 'midtrans-client';
 
 export interface GlobalContext extends BaseContext {
   access_token: string | undefined;
@@ -36,3 +37,15 @@ export interface FileHeader {
   url: string;
   fileId: string;
 }
+
+export type PaymentType = 'bank' | 'ewallet';
+
+export type PaymentProvider = BankProvider | WalletProvider;
+
+export type BankProvider = 'BCA' | 'MANDIRI' | 'BNI' | 'BRI' | 'PERMATA';
+
+export type WalletProvider = EnablePayment;
+
+export type TransactionType = 'Top up' | 'Payment';
+
+export type Currency = 'IDR' | 'USD';

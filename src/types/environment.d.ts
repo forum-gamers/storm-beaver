@@ -10,6 +10,10 @@ declare global {
       NODE_ENV: 'development' | 'test' | 'production';
       MIDTRANS_SERVER_KEY: string;
       MIDTRANS_CLIENT_KEY: string;
+      REDIS_HOST: string;
+      REDIS_PORT: string;
+      REDIS_USERNAME: string;
+      REDIS_PASS: string;
     }
   }
 }

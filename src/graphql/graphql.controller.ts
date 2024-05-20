@@ -43,6 +43,8 @@ import { MEMBER_TYPEDEFS } from './typedefs/community/member.typedefs';
 import { MemberResolver } from './resolvers/community/member.resolver';
 import { VendorResolver } from './resolvers/user/vendor.resolver';
 import { VENDOR_TYPEDEFS } from './typedefs/user/vendor.typedefs';
+import { WalletResolver } from './resolvers/transaction/wallet.resolver';
+import { WALLET_TYPEDEFS } from './typedefs/transaction/wallet.typedefs';
 
 config();
 
@@ -62,6 +64,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
     private readonly communityResolver: CommunityResolver,
     private readonly memberResolver: MemberResolver,
     private readonly vendorResolver: VendorResolver,
+    private readonly walletResolver: WalletResolver,
   ) {}
 
   private createSchema() {
@@ -76,18 +79,20 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
         COMMUNITY_TYPEDEFS,
         MEMBER_TYPEDEFS,
         VENDOR_TYPEDEFS,
+        WALLET_TYPEDEFS,
       ],
       resolvers: [
-        this.userResolver.GenerateResolver(),
-        this.postResolver.GenerateResolver(),
-        this.likeResolver.GenerateResolver(),
-        this.bookmarkResolver.GenerateResolver(),
-        this.commentResolver.GenerateResolver(),
-        this.replyResolver.GenerateResolver(),
-        this.communityResolver.GenerateResolver(),
-        this.memberResolver.GenerateResolver(),
-        this.vendorResolver.GenerateResolver(),
-      ],
+        this.userResolver,
+        this.postResolver,
+        this.likeResolver,
+        this.bookmarkResolver,
+        this.commentResolver,
+        this.replyResolver,
+        this.communityResolver,
+        this.memberResolver,
+        this.vendorResolver,
+        this.walletResolver,
+      ].map((el) => el.GenerateResolver()),
     });
   }
 

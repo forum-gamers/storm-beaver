@@ -15,6 +15,7 @@ export interface IUser {
   status: string;
   createdAt: string | Date;
   updatedAt: string | Date;
+  phoneNumber: string;
 }
 
 export interface UserDatas {

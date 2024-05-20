@@ -19,6 +19,10 @@ import { MemberResolver } from './community/member.resolver';
 import { VendorService } from '../../modules/user/services/vendor.service';
 import { VendorResolver } from './user/vendor.resolver';
 import { WalletService } from '../../modules/transactions/services/wallet.service';
+import { WalletResolver } from './transaction/wallet.resolver';
+import { TransactionService } from '../../modules/transactions/services/transaction.service';
+import { MidtransService } from '../../third-party/midtrans/midtrans.service';
+import { MidtransValidation } from '../../third-party/midtrans/midtrans.validation';
 
 @Module({
   providers: [
@@ -42,6 +46,10 @@ import { WalletService } from '../../modules/transactions/services/wallet.servic
     VendorService,
     VendorResolver,
     WalletService,
+    WalletResolver,
+    TransactionService,
+    MidtransService,
+    MidtransValidation,
   ],
   exports: [
     UserResolver,
@@ -53,6 +61,7 @@ import { WalletService } from '../../modules/transactions/services/wallet.servic
     CommunityResolver,
     MemberResolver,
     VendorResolver,
+    WalletResolver,
   ],
 })
 export class ResolverModule {}
