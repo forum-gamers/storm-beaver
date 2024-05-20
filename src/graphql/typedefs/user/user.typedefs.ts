@@ -26,6 +26,7 @@ export const USER_TYPEDEFS = `#graphql
     password: String!
     role: String
     confirmPassword: String!
+    phoneNumber: String!
   }
 
   input LoginInput {

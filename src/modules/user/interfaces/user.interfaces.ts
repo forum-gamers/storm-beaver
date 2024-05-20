@@ -51,6 +51,7 @@ export interface RegisterInput {
   password: string;
   role: string;
   confirmPassword: string;
+  phoneNumber: string;
 }
 
 export interface Message {
