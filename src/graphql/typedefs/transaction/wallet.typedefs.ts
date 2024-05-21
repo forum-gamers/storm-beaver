@@ -35,6 +35,10 @@ export const WALLET_TYPEDEFS = `#graphql
     va_number: String
   }
 
+  type Query {
+    findMyWallet: Wallet
+  }
+
   type Mutation {
     topup(args: TopUpInput!): ChargeResp
   }

@@ -14,4 +14,5 @@ export interface NoArgument {}
 
 export interface IWalletService extends ServiceClient {
   CreateWallet: GRPC_UNARY<NoArgument, Wallet>;
+  FindMyWallet: GRPC_UNARY<NoArgument, Wallet>;
 }

@@ -40,4 +40,18 @@ export class WalletService extends GRPCBASE implements OnModuleInit {
       );
     });
   }
+
+  public async findMyWallet(args: NoArgument, access_token: string) {
+    return new Promise<Wallet>((resolve, reject) => {
+      this.walletService.FindMyWallet(
+        args,
+        this.generateMetadata({ access_token }),
+        (err, resp) => {
+          if (err) return reject(this.convertError(err));
+
+          resolve(resp);
+        },
+      );
+    });
+  }
 }

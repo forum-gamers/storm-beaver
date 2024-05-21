@@ -33,7 +33,13 @@ export class WalletResolver extends ResolverHelper implements ResolverInitiate {
 
   public GenerateResolver(): ResolverObj {
     return {
-      Query: {},
+      Query: {
+        findMyWallet: async (
+          _: never,
+          args: {},
+          { access_token }: GlobalContext,
+        ) => await this.walletService.findMyWallet({}, access_token),
+      },
       Mutation: {
         topup: async (
           _: never,

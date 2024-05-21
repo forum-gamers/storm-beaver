@@ -3,9 +3,8 @@ import type {
   BankProvider,
   PaymentProvider,
   PaymentType,
-  WalletProvider,
 } from '../../interfaces';
-import { BANK_PROVIDERS, EWALLET_PROVIDERS } from '../../constants/payment';
+import { BANK_PROVIDERS } from '../../constants/payment';
 
 @Injectable()
 export class MidtransValidation {
