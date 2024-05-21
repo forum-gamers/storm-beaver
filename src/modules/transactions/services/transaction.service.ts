@@ -1,13 +1,16 @@
 import { Injectable, type OnModuleInit } from '@nestjs/common';
 import { GRPCBASE } from '../../../base/grpc.base.service';
 import type {
+  ChangeStatusInput,
   CreateTransactionInput,
   ITransactionService,
+  SignatureInput,
   Transaction,
   TransactionIdInput,
 } from '../interfaces/transaction.interface';
 import { join } from 'path';
 import { credentials } from '@grpc/grpc-js';
+import type { Wallet } from '../interfaces/wallet.interface';
 
 @Injectable()
 export class TransactionService extends GRPCBASE implements OnModuleInit {
@@ -53,6 +56,51 @@ export class TransactionService extends GRPCBASE implements OnModuleInit {
   ) {
     return new Promise<Transaction>((resolve, reject) => {
       this.transactionService.CancelTransaction(
+        args,
+        this.generateMetadata({ access_token }),
+        (err, resp) => {
+          if (err) return reject(this.convertError(err));
+
+          resolve(resp);
+        },
+      );
+    });
+  }
+
+  public async findOneBySignature(args: SignatureInput, access_token: string) {
+    return new Promise<Transaction>((resolve, reject) => {
+      this.transactionService.FindOneBySignature(
+        args,
+        this.generateMetadata({ access_token }),
+        (err, resp) => {
+          if (err) return reject(this.convertError(err));
+
+          resolve(resp);
+        },
+      );
+    });
+  }
+
+  public async successTopup(args: SignatureInput, access_token: string) {
+    return new Promise<Wallet>((resolve, reject) => {
+      this.transactionService.SuccessTopup(
+        args,
+        this.generateMetadata({ access_token }),
+        (err, resp) => {
+          if (err) return reject(this.convertError(err));
+
+          resolve(resp);
+        },
+      );
+    });
+  }
+
+  public async changeTopupTransactionStatus(
+    args: ChangeStatusInput,
+    access_token: string,
+  ) {
+    return new Promise<Transaction>((resolve, reject) => {
+      this.transactionService.ChangeStatusTopupTransaction(
         args,
         this.generateMetadata({ access_token }),
         (err, resp) => {

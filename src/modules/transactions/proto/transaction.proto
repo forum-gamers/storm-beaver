@@ -19,6 +19,7 @@ message Transaction {
   double discount = 12;
   string signature = 13;
   string itemId = 14;
+  double fee = 15;
 }
 
 message CreateTransactionInput {
@@ -37,7 +38,28 @@ message TransactionIdInput {
   string id = 1;
 }
 
+message SignatureInput {
+  string signature = 1;
+}
+
+message Wallet {
+  string id = 1;
+  string userId = 2;
+  double balance = 3;
+  double coin = 4;
+  string createdAt = 5;
+  string updatedAt = 6;
+}
+
+message ChangeStatusInput {
+  string signature = 1;
+  string status = 2;
+}
+
 service TransactionService {
   rpc CreateTransaction(CreateTransactionInput) returns (Transaction) {}
   rpc CancelTransaction(TransactionIdInput) returns (Transaction) {}
+  rpc FindOneBySignature(SignatureInput) returns (Transaction) {}
+  rpc SuccessTopup(SignatureInput) returns (Wallet) {}
+  rpc ChangeStatusTopupTransaction(ChangeStatusInput) returns (Transaction) {}
 }

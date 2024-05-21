@@ -56,23 +56,23 @@ declare module "midtrans-client" {
     transaction_details: TransactionDetail;
     customer_details: CustomerDetail;
     item_details: ItemDetail[];
-    bank_transfer?:BankTransferPayload
+    bank_transfer?: BankTransferPayload;
   }
 
   export interface BankTransferPayload {
-    bank:string
-    free_text?:FreeText
-    description?:string
-}
+    bank: string;
+    free_text?: FreeText;
+    description?: string;
+  }
 
-export interface FreeText {
-    inquiry?:InquiryText[]
-}
+  export interface FreeText {
+    inquiry?: InquiryText[];
+  }
 
-export interface InquiryText {
-    id?:string
-    en?:string
-}
+  export interface InquiryText {
+    id?: string;
+    en?: string;
+  }
 
   export type PaymentType = "bank_transfer" | EnablePayment;
 

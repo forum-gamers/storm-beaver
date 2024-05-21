@@ -9,10 +9,10 @@ import { v4 } from 'uuid';
 @Injectable()
 export class MidtransService extends MtCore {
   public generateId(type: TransactionType) {
-    return `FG-${v4()}-${this.generateString(3)}-${this.getTransactionType(type)}`;
+    return `FG-${v4()}-${this.generateString(3)}-${this.generateTransactionType(type)}`;
   }
 
-  private getTransactionType(type: TransactionType) {
+  private generateTransactionType(type: TransactionType) {
     switch (type) {
       case 'Payment':
         return 'py';
@@ -20,6 +20,18 @@ export class MidtransService extends MtCore {
         return 'tp';
       default:
         return 'unk';
+    }
+  }
+
+  public getTransactionType(order_id: string) {
+    const splitted = order_id.split('-');
+    switch (splitted[splitted.length - 1]) {
+      case 'py':
+        return 'Payment';
+      case 'tp':
+        return 'Top up';
+      default:
+        return 'Unknown';
     }
   }
 
@@ -73,5 +85,9 @@ export class MidtransService extends MtCore {
         Math.floor(Math.random() * characters.length),
       );
     return result;
+  }
+
+  public async notification(body: ChargeParameter) {
+    return await this.coreApi.transaction.notification(body);
   }
 }
