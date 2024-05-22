@@ -11,6 +11,7 @@ import type { CreateCommunityProps } from '../../../interfaces/community.request
 import { ImageService } from '../../../modules/image/services/image.service';
 import type {
   ChangeOwnershipInput,
+  Community,
   CommunityIdInput,
   CreateCommunityInput,
   TextInput,
@@ -20,6 +21,7 @@ import {
   COMMUNITY_BACKGROUND_FOLDER,
   COMMUNITY_IMAGE_FOLDER,
 } from '../../../constants/folder';
+import { RedisService } from '../../../third-party/redis/redis.service';
 
 @Injectable()
 export class CommunityResolver
@@ -29,6 +31,7 @@ export class CommunityResolver
   constructor(
     private readonly communityService: CommunityService,
     private readonly imageService: ImageService,
+    private readonly redisService: RedisService,
   ) {
     super();
   }
@@ -40,8 +43,24 @@ export class CommunityResolver
           _: never,
           { communityId }: CommunityIdInput,
           { access_token }: GlobalContext,
-        ) =>
-          await this.communityService.findById({ communityId }, access_token),
+        ) => {
+          try {
+            const cache = await this.redisService.getData<Community>(
+              `community:${communityId}`,
+            );
+            if (cache) return cache;
+            const community = await this.communityService.findById(
+              { communityId },
+              access_token,
+            );
+            this.redisService.setData(`community:${communityId}`, community);
+
+            return community;
+          } catch (err) {
+            this.LogImportantError(err);
+            throw errorHandling(err);
+          }
+        },
       },
       Mutation: {
         createCommunity: async (
@@ -121,6 +140,8 @@ export class CommunityResolver
           } catch (err) {
             this.LogImportantError(err);
             throw errorHandling(err);
+          } finally {
+            this.redisService.resetData(`community:${communityId}`);
           }
         },
         updateImg: async (
@@ -153,6 +174,7 @@ export class CommunityResolver
             this.LogImportantError(err);
             throw errorHandling(err);
           } finally {
+            this.redisService.resetData(`community:${communityId}`);
             if (!!fileId)
               this.imageService.deleteFile({ file_id: fileId }, access_token);
           }
@@ -187,6 +209,7 @@ export class CommunityResolver
             this.LogImportantError(err);
             throw errorHandling(err);
           } finally {
+            this.redisService.resetData(`community:${communityId}`);
             if (!!fileId)
               this.imageService.deleteFile({ file_id: fileId }, access_token);
           }
@@ -195,20 +218,36 @@ export class CommunityResolver
           _: never,
           { text, communityId }: TextInput,
           { access_token }: GlobalContext,
-        ) =>
-          await this.communityService.updateDesc(
-            { text, communityId },
-            access_token,
-          ),
+        ) => {
+          try {
+            return await this.communityService.updateDesc(
+              { text, communityId },
+              access_token,
+            );
+          } catch (err) {
+            this.LogImportantError(err);
+            throw errorHandling(err);
+          } finally {
+            this.redisService.resetData(`community:${communityId}`);
+          }
+        },
         changeOwnership: async (
           _: never,
           { communityId, targetId }: ChangeOwnershipInput,
           { access_token }: GlobalContext,
-        ) =>
-          await this.communityService.changeOwnership(
-            { communityId, targetId },
-            access_token,
-          ),
+        ) => {
+          try {
+            return await this.communityService.changeOwnership(
+              { communityId, targetId },
+              access_token,
+            );
+          } catch (err) {
+            this.LogImportantError(err);
+            throw errorHandling(err);
+          } finally {
+            this.redisService.resetData(`community:${communityId}`);
+          }
+        },
       },
     };
   }

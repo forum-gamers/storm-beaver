@@ -18,6 +18,9 @@ import { Status } from '@grpc/grpc-js/build/src/constants';
 import { UserService } from '../../../modules/user/services/user.service';
 import { BANK_PROVIDERS } from '../../../constants/payment';
 import { sha512 } from 'js-sha512';
+import jwtUtils from '../../../utils/jwt.utils';
+import { RedisService } from '../../../third-party/redis/redis.service';
+import type { Wallet } from '../../../modules/transactions/interfaces/wallet.interface';
 
 @Injectable()
 export class WalletResolver extends ResolverHelper implements ResolverInitiate {
@@ -27,6 +30,7 @@ export class WalletResolver extends ResolverHelper implements ResolverInitiate {
     private readonly midtransService: MidtransService,
     private readonly midtransValidation: MidtransValidation,
     private readonly userService: UserService,
+    private readonly redisService: RedisService,
   ) {
     super();
   }
@@ -38,7 +42,26 @@ export class WalletResolver extends ResolverHelper implements ResolverInitiate {
           _: never,
           args: {},
           { access_token }: GlobalContext,
-        ) => await this.walletService.findMyWallet({}, access_token),
+        ) => {
+          try {
+            const { id } = jwtUtils.decodeToken(access_token);
+            const cache = await this.redisService.getData<Wallet>(
+              `wallet:${id}`,
+            );
+            if (cache) return cache;
+
+            const wallet = await this.walletService.findMyWallet(
+              {},
+              access_token,
+            );
+
+            this.redisService.setData(`wallet:${id}`, wallet);
+            return wallet;
+          } catch (err) {
+            this.LogImportantError(err);
+            throw errorHandling(err);
+          }
+        },
       },
       Mutation: {
         topup: async (

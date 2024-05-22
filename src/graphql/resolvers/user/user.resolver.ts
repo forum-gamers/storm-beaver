@@ -8,6 +8,7 @@ import type {
 } from '../../../interfaces';
 import type {
   EmailInput,
+  IUser,
   LoginInput,
   RegisterInput,
   UserParams,
@@ -20,6 +21,8 @@ import {
   USER_PROFILE_FOLDER,
 } from '../../../constants/folder';
 import { WalletService } from '../../../modules/transactions/services/wallet.service';
+import { RedisService } from '../../../third-party/redis/redis.service';
+import jwtUtils from '../../../utils/jwt.utils';
 
 @Injectable()
 export class UserResolver extends ResolverHelper implements ResolverInitiate {
@@ -27,6 +30,7 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
     private readonly userService: UserService,
     private readonly imageService: ImageService,
     private readonly walletService: WalletService,
+    private readonly redisService: RedisService,
   ) {
     super();
   }
@@ -34,8 +38,21 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
   GenerateResolver(): ResolverObj {
     return {
       Query: {
-        me: async (_: never, args: {}, ctx: GlobalContext) =>
-          await this.userService.me(ctx?.access_token),
+        me: async (_: never, args: {}, { access_token }: GlobalContext) => {
+          try {
+            const { id } = jwtUtils.decodeToken(access_token);
+            const cache = await this.redisService.getData<IUser>(`user:${id}`);
+            if (cache) return cache;
+
+            const user = await this.userService.me(access_token);
+            this.redisService.setData(`user:${id}`, user);
+
+            return user;
+          } catch (err) {
+            this.LogImportantError(err);
+            throw errorHandling(err);
+          }
+        },
         getById: async (_: never, args: UserParams, ctx: GlobalContext) =>
           await this.userService.getById(args, ctx?.access_token),
       },
@@ -79,6 +96,9 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
               { fileId: file_id, url },
               access_token,
             );
+            this.redisService.resetData(
+              `user:${jwtUtils.decodeToken(access_token).id}`,
+            );
 
             if (result !== 'success')
               await this.imageService.deleteFile(
@@ -111,6 +131,9 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
               { fileId: file_id, url },
               access_token,
             );
+            this.redisService.resetData(
+              `user:${jwtUtils.decodeToken(access_token).id}`,
+            );
 
             if (result !== 'success')
               await this.imageService.deleteFile(
@@ -124,8 +147,17 @@ export class UserResolver extends ResolverHelper implements ResolverInitiate {
             throw errorHandling(err);
           }
         },
-        changeVerified: async (_: never, { token }: { token: string }) =>
-          await this.userService.changeVerified({ token }),
+        changeVerified: async (_: never, { token }: { token: string }) => {
+          try {
+            this.redisService.resetData(
+              `user:${jwtUtils.decodeToken(token).id}`,
+            );
+            return await this.userService.changeVerified({ token });
+          } catch (err) {
+            this.LogImportantError(err);
+            throw errorHandling(err);
+          }
+        },
         resendEmailVerification: async (_: never, { email }: EmailInput) =>
           await this.userService.resendEmail({ email }),
       },

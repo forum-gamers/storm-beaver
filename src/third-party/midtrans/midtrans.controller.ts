@@ -12,12 +12,14 @@ import { NotificationSignatureParser } from '../../utils/pipes/notification.util
 import type { Transaction } from '../../modules/transactions/interfaces/transaction.interface';
 import { TransactionService } from '../../modules/transactions/services/transaction.service';
 import jwtUtils from '../../utils/jwt.utils';
+import { RedisService } from '../redis/redis.service';
 
 @Controller('/third-party/mt')
 export class MidtransController {
   constructor(
     private readonly midtransService: MidtransService,
     private readonly transactionService: TransactionService,
+    private readonly redisService: RedisService,
   ) {}
 
   @Post('notification')
@@ -32,10 +34,12 @@ export class MidtransController {
 
     switch (data.transaction_status) {
       case 'settlement': {
-        await this.transactionService.successTopup(
+        const wallet = await this.transactionService.successTopup(
           { signature: transaction?.signature },
           jwtUtils.createAppToken(),
         );
+        this.redisService.resetData(`wallet:${wallet.userId}`);
+
         break;
       }
       case 'cancel':

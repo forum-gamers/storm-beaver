@@ -1,12 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { REDIS_PROVIDER } from './redis.provider';
-import { Redis } from 'ioredis';
+import { Injectable, type OnModuleInit } from '@nestjs/common';
+import AppRedis from '../../lib/redis.lib';
 
 @Injectable()
-export class RedisService {
-  constructor(@Inject(REDIS_PROVIDER) private readonly redis: Redis) {}
-
+export class RedisService extends AppRedis implements OnModuleInit {
   public async setData(key: string, data: object) {
+    await this.resetData(key);
     return await this.redis.set(key, JSON.stringify(data));
   }
 
@@ -15,5 +13,13 @@ export class RedisService {
     if (!data) return null;
 
     return JSON.parse(data) as T;
+  }
+
+  public async resetData(key: string) {
+    return await this.redis.del(key);
+  }
+
+  public onModuleInit() {
+    this.initiate();
   }
 }

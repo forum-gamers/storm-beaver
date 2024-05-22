@@ -23,9 +23,11 @@ import { WalletResolver } from './transaction/wallet.resolver';
 import { TransactionService } from '../../modules/transactions/services/transaction.service';
 import { MidtransService } from '../../third-party/midtrans/midtrans.service';
 import { MidtransValidation } from '../../third-party/midtrans/midtrans.validation';
+import { RedisService } from '../../third-party/redis/redis.service';
 
 @Module({
   providers: [
+    RedisService,
     UserService,
     UserResolver,
     PostService,

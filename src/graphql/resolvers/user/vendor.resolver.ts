@@ -18,12 +18,15 @@ import type {
   DescInput,
 } from '../../../modules/user/interfaces/vendor.interface';
 import type { FileInput } from '../../../interfaces/request';
+import jwtUtils from '../../../utils/jwt.utils';
+import { RedisService } from '../../../third-party/redis/redis.service';
 
 @Injectable()
 export class VendorResolver extends ResolverHelper implements ResolverInitiate {
   constructor(
     protected readonly vendorService: VendorService,
     private readonly imageService: ImageService,
+    private readonly redisService: RedisService,
   ) {
     super();
   }
@@ -35,7 +38,21 @@ export class VendorResolver extends ResolverHelper implements ResolverInitiate {
           _: never,
           args: {},
           { access_token }: GlobalContext,
-        ) => await this.vendorService.me(access_token),
+        ) => {
+          try {
+            const { id } = jwtUtils.decodeToken(access_token);
+            const cache = await this.redisService.getData(`vendor:${id}`);
+            if (cache) return cache;
+
+            const vendor = await this.vendorService.me(access_token);
+            this.redisService.setData(`vendor:${id}`, vendor);
+
+            return vendor;
+          } catch (err) {
+            this.LogImportantError(err);
+            throw errorHandling(err);
+          }
+        },
       },
       Mutation: {
         createVendor: async (
@@ -86,10 +103,17 @@ export class VendorResolver extends ResolverHelper implements ResolverInitiate {
               };
             }
 
-            return await this.vendorService.createVendorAccount(
+            const vendor = await this.vendorService.createVendorAccount(
               payload,
               access_token,
             );
+
+            this.redisService.setData(
+              `vendor:${jwtUtils.decodeToken(access_token).id}`,
+              vendor,
+            );
+
+            return vendor;
           } catch (err) {
             this.LogImportantError(err);
             throw errorHandling(err);
@@ -122,6 +146,9 @@ export class VendorResolver extends ResolverHelper implements ResolverInitiate {
             this.LogImportantError(err);
             throw errorHandling(err);
           } finally {
+            this.redisService.resetData(
+              `wallet:${jwtUtils.decodeToken(access_token).id}`,
+            );
             if (!!fileId)
               this.imageService.deleteFile({ file_id: fileId }, access_token);
           }
@@ -153,6 +180,9 @@ export class VendorResolver extends ResolverHelper implements ResolverInitiate {
             this.LogImportantError(err);
             throw errorHandling(err);
           } finally {
+            this.redisService.resetData(
+              `wallet:${jwtUtils.decodeToken(access_token).id}`,
+            );
             if (!!fileId)
               this.imageService.deleteFile({ file_id: fileId }, access_token);
           }
@@ -161,7 +191,21 @@ export class VendorResolver extends ResolverHelper implements ResolverInitiate {
           _: never,
           { desc }: DescInput,
           { access_token }: GlobalContext,
-        ) => await this.vendorService.updateDescription({ desc }, access_token),
+        ) => {
+          try {
+            return await this.vendorService.updateDescription(
+              { desc },
+              access_token,
+            );
+          } catch (err) {
+            this.LogImportantError(err);
+            throw errorHandling(err);
+          } finally {
+            this.redisService.resetData(
+              `wallet:${jwtUtils.decodeToken(access_token).id}`,
+            );
+          }
+        },
       },
     };
   }

@@ -8,7 +8,6 @@ import { MidtransController } from './midtrans/midtrans.controller';
 import { UserService } from '../modules/user/services/user.service';
 import { MidtransValidation } from './midtrans/midtrans.validation';
 import { RedisService } from './redis/redis.service';
-import { redisProvider } from './redis/redis.provider';
 import { TransactionService } from '../modules/transactions/services/transaction.service';
 import { BodyJsonParser } from '../middlewares/bodyJsonParser.middleware';
 import { UrlEncodedParser } from '../middlewares/urlEncodedParser.middleware';
@@ -19,12 +18,12 @@ import { UrlEncodedParser } from '../middlewares/urlEncodedParser.middleware';
     UserService,
     MidtransValidation,
     RedisService,
-    redisProvider,
     TransactionService,
     BodyJsonParser,
     UrlEncodedParser,
   ],
   controllers: [MidtransController],
+  exports: [],
 })
 export class ThirdPartyModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -4,21 +4,24 @@ import { config } from 'dotenv';
 config();
 
 export default class AppRedis {
-  public redis: Redis;
-  constructor() {
-    this.redis = new Redis({
-      host: process.env.REDIS_HOST,
-      port: Number(process.env.REDIS_PORT),
-      username: process.env.REDIS_USERNAME,
-      password: process.env.REDIS_PASS,
-    });
+  public redis: Redis | null = null;
 
-    this.redis.on('connect', () => {
-      console.info(new Date().toISOString() + ' info: connect to redis');
-    });
+  protected initiate() {
+    if (!this.redis) {
+      this.redis = new Redis({
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT),
+        username: process.env.REDIS_USERNAME,
+        password: process.env.REDIS_PASS,
+      });
 
-    this.redis.on('error', (err) => {
-      console.log(`${new Date().toISOString()} error: redis:${err}`);
-    });
+      this.redis.on('connect', () => {
+        console.info(new Date().toISOString() + ' info: connect to redis');
+      });
+
+      this.redis.on('error', (err) => {
+        console.log(`${new Date().toISOString()} error: redis:${err}`);
+      });
+    }
   }
 }
