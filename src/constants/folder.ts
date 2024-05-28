@@ -11,3 +11,5 @@ export const COMMUNITY_BACKGROUND_FOLDER = 'community-background';
 export const VENDOR_IMAGE_FOLDER = 'vendor-image';
 
 export const VENDOR_BACKGROUND_FOLDER = 'vendor-background';
+
+export const ROOM_IMAGE_FOLDER = 'room-image';

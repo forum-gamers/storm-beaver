@@ -45,6 +45,8 @@ import { VendorResolver } from './resolvers/user/vendor.resolver';
 import { VENDOR_TYPEDEFS } from './typedefs/user/vendor.typedefs';
 import { WalletResolver } from './resolvers/transaction/wallet.resolver';
 import { WALLET_TYPEDEFS } from './typedefs/transaction/wallet.typedefs';
+import { ROOM_TYPEDEFS } from './typedefs/chat/room.typedefs';
+import { RoomResolver } from './resolvers/chat/room.resolver';
 
 config();
 
@@ -65,6 +67,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
     private readonly memberResolver: MemberResolver,
     private readonly vendorResolver: VendorResolver,
     private readonly walletResolver: WalletResolver,
+    private readonly roomResolver: RoomResolver,
   ) {}
 
   private createSchema() {
@@ -80,6 +83,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
         MEMBER_TYPEDEFS,
         VENDOR_TYPEDEFS,
         WALLET_TYPEDEFS,
+        ROOM_TYPEDEFS,
       ],
       resolvers: [
         this.userResolver,
@@ -92,6 +96,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
         this.memberResolver,
         this.vendorResolver,
         this.walletResolver,
+        this.roomResolver,
       ].map((el) => el.GenerateResolver()),
     });
   }

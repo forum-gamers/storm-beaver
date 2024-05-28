@@ -23,7 +23,7 @@ export type GRPC_UNARY<T, R> = (
 ) => void;
 
 export interface ResolverInitiate {
-  GenerateResolver(): any;
+  GenerateResolver(): ResolverObj;
 }
 
 export interface ResolverObj extends Record<string, any> {

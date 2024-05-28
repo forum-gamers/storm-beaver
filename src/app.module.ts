@@ -9,6 +9,7 @@ import { PostModule } from './modules/post/post.module';
 import { CommunityModule } from './modules/community/community.module';
 import { TransactionModule } from './modules/transactions/transaction.module';
 import { ThirdPartyModule } from './third-party/thirdparty.module';
+import { ChatModule } from './modules/chat/chat.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ThirdPartyModule } from './third-party/thirdparty.module';
     CommunityModule,
     TransactionModule,
     ThirdPartyModule,
+    ChatModule,
   ],
   controllers: [GraphqlController],
 })

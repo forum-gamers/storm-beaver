@@ -24,6 +24,10 @@ import { TransactionService } from '../../modules/transactions/services/transact
 import { MidtransService } from '../../third-party/midtrans/midtrans.service';
 import { MidtransValidation } from '../../third-party/midtrans/midtrans.validation';
 import { RedisService } from '../../third-party/redis/redis.service';
+import { RoomResolver } from './chat/room.resolver';
+import { RoomService } from '../../modules/chat/services/room.service';
+import { ChatService } from '../../modules/chat/services/chat.service';
+import { ChatResolver } from './chat/chat.resolver';
 
 @Module({
   providers: [
@@ -52,6 +56,10 @@ import { RedisService } from '../../third-party/redis/redis.service';
     TransactionService,
     MidtransService,
     MidtransValidation,
+    RoomService,
+    RoomResolver,
+    ChatService,
+    ChatResolver,
   ],
   exports: [
     UserResolver,
@@ -64,6 +72,8 @@ import { RedisService } from '../../third-party/redis/redis.service';
     MemberResolver,
     VendorResolver,
     WalletResolver,
+    RoomResolver,
+    ChatResolver,
   ],
 })
 export class ResolverModule {}
