@@ -9,14 +9,6 @@ export const COMMENT_TYPEDEFS = `#graphql
     reply: [IReply]
   }
 
-  type IReply {
-    _id: String
-    userId: String
-    text: String
-    createdAt: String
-    updatedAt: String
-  }
-
   input CommentForm {
     text: String!
     postId: String!

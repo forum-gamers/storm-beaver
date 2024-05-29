@@ -47,6 +47,7 @@ import { WalletResolver } from './resolvers/transaction/wallet.resolver';
 import { WALLET_TYPEDEFS } from './typedefs/transaction/wallet.typedefs';
 import { ROOM_TYPEDEFS } from './typedefs/chat/room.typedefs';
 import { RoomResolver } from './resolvers/chat/room.resolver';
+import { FOLLOW_TYPEDEFS } from './typedefs/user/follow.typedefs';
 
 config();
 
@@ -84,6 +85,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
         VENDOR_TYPEDEFS,
         WALLET_TYPEDEFS,
         ROOM_TYPEDEFS,
+        FOLLOW_TYPEDEFS,
       ],
       resolvers: [
         this.userResolver,

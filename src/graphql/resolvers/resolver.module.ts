@@ -28,6 +28,8 @@ import { RoomResolver } from './chat/room.resolver';
 import { RoomService } from '../../modules/chat/services/room.service';
 import { ChatService } from '../../modules/chat/services/chat.service';
 import { ChatResolver } from './chat/chat.resolver';
+import { FollowService } from 'src/modules/user/services/follow.service';
+import { FollowResolver } from './user/follow.resolver';
 
 @Module({
   providers: [
@@ -60,6 +62,8 @@ import { ChatResolver } from './chat/chat.resolver';
     RoomResolver,
     ChatService,
     ChatResolver,
+    FollowService,
+    FollowResolver,
   ],
   exports: [
     UserResolver,
@@ -74,6 +78,7 @@ import { ChatResolver } from './chat/chat.resolver';
     WalletResolver,
     RoomResolver,
     ChatResolver,
+    FollowResolver,
   ],
 })
 export class ResolverModule {}
