@@ -6,6 +6,7 @@ import type {
   PaginationWithRoomType,
   RoomByType,
   RoomId,
+  UserId,
   UserRoomInput,
 } from '../interfaces/room.interface';
 import { join } from 'path';
@@ -13,7 +14,6 @@ import { credentials } from '@grpc/grpc-js';
 import type {
   DataWithMetadata,
   Message,
-  Pagination,
   RepeatedUserRoom,
   Room,
 } from '../interfaces/global.interface';
@@ -125,6 +125,20 @@ export class RoomService extends GRPCBASE implements OnModuleInit {
   public async getRoomById(args: RoomId, access_token: string) {
     return new Promise<Room>((resolve, reject) => {
       this.roomService.GetRoomById(
+        args,
+        this.generateMetadata({ access_token }),
+        (err, resp) => {
+          if (err) return reject(this.convertError(err));
+
+          resolve(resp);
+        },
+      );
+    });
+  }
+
+  public async getRoomByUserId(args: UserId, access_token: string) {
+    return new Promise<Room>((resolve, reject) => {
+      this.roomService.GetUserRoomByUserId(
         args,
         this.generateMetadata({ access_token }),
         (err, resp) => {

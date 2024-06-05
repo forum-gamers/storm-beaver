@@ -35,6 +35,10 @@ export interface PaginationWithRoomType extends Pagination {
   type?: RoomType | 'All';
 }
 
+export interface UserId {
+  userId: string;
+}
+
 export interface IRoomService extends ServiceClient {
   CreateRoom: GRPC_UNARY<CreateRoomInput, Room>;
   DeleteUser: GRPC_UNARY<UserRoomInput, Message>;
@@ -43,4 +47,5 @@ export interface IRoomService extends ServiceClient {
   DownAdmin: GRPC_UNARY<UserRoomInput, RepeatedUserRoom>;
   GetUserRoom: GRPC_UNARY<Pagination, DataWithMetadata<RoomByType>>;
   GetRoomById: GRPC_UNARY<RoomId, Room>;
+  GetUserRoomByUserId: GRPC_UNARY<UserId, Room>;
 }

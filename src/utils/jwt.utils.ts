@@ -1,4 +1,4 @@
-import { sign, type JwtPayload, decode } from 'jsonwebtoken';
+import { sign, type JwtPayload, decode, verify } from 'jsonwebtoken';
 import { config } from 'dotenv';
 
 config();
@@ -29,6 +29,10 @@ class JWT {
 
   public decodeToken(token: string) {
     return decode(token) as TokenValue;
+  }
+
+  public verifyToken(token: string) {
+    return verify(token, process.env.SECRET) as TokenValue;
   }
 }
 

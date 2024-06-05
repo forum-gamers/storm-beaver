@@ -15,12 +15,7 @@ export const CHAT_TYPEDEFS = `#graphql
   input CreateChatInput {
     roomId: String!
     message: String
-    file: FileHeader
-  }
-
-  input FileInput {
-    base64: String!
-    filename: String!
+    files: FileInput
   }
 
   type Mutation {

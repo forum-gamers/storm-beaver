@@ -5,7 +5,7 @@ export abstract class ResolverHelper {
   }
 
   protected base64ToBlob(base64: string, filename: string) {
-    const match = base64.match(/^data:(image\/[a-zA-Z+]+);base64,(.+)$/);
+    const match = RegExp(/^data:(image\/[a-zA-Z+]+);base64,(.+)$/).exec(base64);
     if (!match) return null;
 
     const [, type, imgStr] = match;

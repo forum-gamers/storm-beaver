@@ -23,7 +23,7 @@ import { UrlEncodedParser } from '../middlewares/urlEncodedParser.middleware';
     UrlEncodedParser,
   ],
   controllers: [MidtransController],
-  exports: [],
+  exports: [RedisService, MidtransService],
 })
 export class ThirdPartyModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

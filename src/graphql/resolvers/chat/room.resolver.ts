@@ -11,6 +11,7 @@ import type {
   UserRoomInput,
   CreateRoomInput as CreateRoomInputs,
   RoomByType,
+  UserId,
 } from '../../../modules/chat/interfaces/room.interface';
 import errorHandling from '../../../middlewares/errorHandling.middleware';
 import type {
@@ -20,12 +21,14 @@ import type {
 import { ImageService } from '../../../modules/image/services/image.service';
 import type { CreateRoomInput } from '../../../interfaces/chat.request';
 import { ROOM_IMAGE_FOLDER } from '../../../constants/folder';
+import { ChatSocket } from '../../../modules/chat/chat.gateway';
 
 @Injectable()
 export class RoomResolver extends ResolverHelper implements ResolverInitiate {
   constructor(
     private readonly roomService: RoomService,
     private readonly imageService: ImageService,
+    private readonly chatSocket: ChatSocket,
   ) {
     super();
   }
@@ -66,6 +69,21 @@ export class RoomResolver extends ResolverHelper implements ResolverInitiate {
             throw errorHandling(err);
           }
         },
+        getRoomByUserId: async (
+          _: never,
+          { userId }: UserId,
+          { access_token }: GlobalContext,
+        ) => {
+          try {
+            return await this.roomService.getRoomByUserId(
+              { userId },
+              access_token,
+            );
+          } catch (err) {
+            this.LogImportantError(err);
+            throw errorHandling(err);
+          }
+        },
       },
       Mutation: {
         createRoom: async (
@@ -75,12 +93,13 @@ export class RoomResolver extends ResolverHelper implements ResolverInitiate {
           }: { args: CreateRoomInput },
           { access_token }: GlobalContext,
         ) => {
+          let payload: CreateRoomInputs = {
+            name,
+            description,
+            users,
+          };
+          let isError = false;
           try {
-            let payload: CreateRoomInputs = {
-              name,
-              description,
-              users,
-            };
             if (file) {
               const { file_id, url, content_type } =
                 await this.imageService.uploadImg(
@@ -95,10 +114,23 @@ export class RoomResolver extends ResolverHelper implements ResolverInitiate {
               payload['file']['fileId'] = file_id;
               payload['file']['contentType'] = content_type;
             }
-            return await this.roomService.createRoom(payload, access_token);
+            const room = await this.roomService.createRoom(
+              payload,
+              access_token,
+            );
+            this.chatSocket.sendNewRoom(room);
+
+            return room;
           } catch (err) {
+            isError = true;
             this.LogImportantError(err);
             throw errorHandling(err);
+          } finally {
+            if (isError && payload?.file?.fileId)
+              this.imageService.deleteFile(
+                { file_id: payload.file.fileId },
+                access_token,
+              );
           }
         },
         deleteUser: async (

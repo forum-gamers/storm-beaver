@@ -48,6 +48,7 @@ import { WALLET_TYPEDEFS } from './typedefs/transaction/wallet.typedefs';
 import { ROOM_TYPEDEFS } from './typedefs/chat/room.typedefs';
 import { RoomResolver } from './resolvers/chat/room.resolver';
 import { FOLLOW_TYPEDEFS } from './typedefs/user/follow.typedefs';
+import { CHAT_TYPEDEFS } from './typedefs/chat/chat.typedefs';
 
 config();
 
@@ -86,6 +87,7 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
         WALLET_TYPEDEFS,
         ROOM_TYPEDEFS,
         FOLLOW_TYPEDEFS,
+        CHAT_TYPEDEFS,
       ],
       resolvers: [
         this.userResolver,
@@ -107,8 +109,11 @@ export class GraphqlController implements OnModuleDestroy, OnModuleInit {
     const logInfo = (msg: string) => {
       this.logger.info(msg);
     };
+
+    const schema = this.createSchema();
+
     this.apolloServer = new ApolloServer<BaseContext>({
-      schema: this.createSchema(),
+      schema,
       introspection: !isProduction,
       includeStacktraceInErrorResponses: !isProduction,
       status400ForVariableCoercionErrors: true,

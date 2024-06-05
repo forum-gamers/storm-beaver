@@ -50,6 +50,7 @@ export const ROOM_TYPEDEFS = `#graphql
   type Query {
     getUserRoom(page: Int, limit: Int,type: String): RoomByType
     getRoomById(roomId: String!): Room
+    getRoomByUserId(userId: String!): Room
   }
 
   type Mutation {

@@ -4,5 +4,6 @@ import { MemberService } from './services/member.service';
 
 @Module({
   providers: [CommunityService, MemberService],
+  exports: [CommunityService, MemberService],
 })
 export class CommunityModule {}

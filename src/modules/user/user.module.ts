@@ -5,5 +5,6 @@ import { FollowService } from './services/follow.service';
 
 @Module({
   providers: [UserService, VendorService, FollowService],
+  exports: [UserService, VendorService, FollowService],
 })
 export class UserModule {}
