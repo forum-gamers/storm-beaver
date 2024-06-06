@@ -22,6 +22,9 @@ import { ImageService } from '../../../modules/image/services/image.service';
 import type { CreateRoomInput } from '../../../interfaces/chat.request';
 import { ROOM_IMAGE_FOLDER } from '../../../constants/folder';
 import { ChatSocket } from '../../../modules/chat/chat.gateway';
+import { UserService } from '../../../modules/user/services/user.service';
+import AppError from '../../../base/error.base';
+import { Status } from '@grpc/grpc-js/build/src/constants';
 
 @Injectable()
 export class RoomResolver extends ResolverHelper implements ResolverInitiate {
@@ -29,6 +32,7 @@ export class RoomResolver extends ResolverHelper implements ResolverInitiate {
     private readonly roomService: RoomService,
     private readonly imageService: ImageService,
     private readonly chatSocket: ChatSocket,
+    private readonly userService: UserService,
   ) {
     super();
   }
@@ -100,6 +104,17 @@ export class RoomResolver extends ResolverHelper implements ResolverInitiate {
           };
           let isError = false;
           try {
+            if (!users?.length)
+              throw new AppError({
+                message: 'users must be provided',
+                status: Status.INVALID_ARGUMENT,
+              });
+
+            const userDatas = this.userService.getMultipleUsers(
+              { ids: users },
+              access_token,
+            );
+
             if (file) {
               const { file_id, url, content_type } =
                 await this.imageService.uploadImg(
@@ -114,6 +129,19 @@ export class RoomResolver extends ResolverHelper implements ResolverInitiate {
               payload['file']['fileId'] = file_id;
               payload['file']['contentType'] = content_type;
             }
+
+            payload.users = (await userDatas)
+              .filter(({ id }) => users.includes(id))
+              .map(({ id }) => id);
+
+            if (!payload?.users?.length) {
+              isError = true;
+              throw new AppError({
+                message: 'no valid user provided',
+                status: Status.INVALID_ARGUMENT,
+              });
+            }
+
             const room = await this.roomService.createRoom(
               payload,
               access_token,
